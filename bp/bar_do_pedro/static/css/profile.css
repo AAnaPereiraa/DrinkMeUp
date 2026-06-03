@@ -1,4 +1,5 @@
 /* Reset some default margins and paddings */
+/* Reset some default margins and paddings */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -10,17 +11,7 @@ html, body {
   max-width: 100%;
   overflow-x: hidden;
 }
-
-/* Example breakpoint for tablets */
-@media (min-width: 768px) {
-    /* Styles for medium devices */
-  }
   
-  /* Example breakpoint for desktops */
-  @media (min-width: 1024px) {
-    /* Styles for larger screens */
-  }
-
 body {
     background-image: url("Background.png");
     background-size: cover;
@@ -42,7 +33,6 @@ h2 {
     margin-top: 80px;
     width: fit-content;
     padding: 10px;
-    
 }
 
 .hello {
@@ -52,7 +42,6 @@ h2 {
     justify-content: center;
 }
 
-
 .row {
     display: flex;
     flex-direction: row;
@@ -60,71 +49,97 @@ h2 {
     margin-top: 20px;
     flex-wrap: nowrap;
     color: whitesmoke;
+    max-width: 1200px;
+    width: calc(100% - 32px);
     margin-left: auto;
     margin-right: auto;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 24px;
+    padding: 0 8px 0 0;
 }
 
 .leftcolumn {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    width: 400px;
-    height: 500px;
-    margin-left: 50px;
-    align-items: center;
-    padding: 20px;
-    text-decoration: none;
-    
+    flex: 1 1 auto;
+    min-width: 320px;
+    max-width: calc(100% - 340px);
+    margin-right: 20px;
+    height: auto;
+    align-items: stretch;
+    padding: 12px 0 12px 0;
 }
 
 .details {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-top: 50px;
+    display: block;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    margin-top: 30px;
+    background: rgba(0,0,0,0.18);
+    padding: 6px 6px;
 }
 
-
 .cocktail-row {
-    display: flex;
-    border-bottom: 1px solid #ddd;
-    
+    display: grid;
+    grid-template-columns: 1fr 84px minmax(160px, 1fr);
+    align-items: center;
+    padding: 8px 10px;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .cocktail-row:last-child {
     border-bottom: none;
-    
 }
 
-.cocktail-name,
+.cocktail-name {
+    padding-right: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cocktail-comment{
+    color: #e9e9e9;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.95rem;
+    justify-self: end;
+    text-align: right;
+}
+
+.cocktail-row.header-row{
+    font-weight: 700;
+    background: rgba(255,255,255,0.03);
+}
+
 .cocktail-rate {
-    padding: 8px;
-    text-align: center;
-    border-right: 1px solid #ddd;
+    text-align: right;
+    font-weight: 700;
+    color: #f0e6d8;
 }
 
-.cocktail-rate {
-    border-right: none;
+.cocktail-row:hover {
+    background: rgba(255,255,255,0.02);
 }
-
 
 .rightcolumn {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    width: 400px;
-    height: 500px;
-    margin-right: auto;
-    margin-left: auto;
+    flex: 0 0 320px; /* fixed width to ensure left column uses remaining space */
+    min-width: 260px;
+    height: auto;
     align-items: center;
     text-align: center;
     padding: 20px;
 }
 
 .order {
-    width: 320px;
+    width: auto;
+    max-width: 760px; /* allow two-or-more columns side-by-side */
     margin-top: 50px;
 }
 
@@ -160,7 +175,6 @@ form {
     justify-content: center;
     align-content: flex-start;
     align-items: flex-start;
-
 }
 
 fieldset {
@@ -179,10 +193,82 @@ h3 {
     align-items: center;
 }
 
-.spirits {
+.spirits-columns{
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    flex-wrap: nowrap; /* keep columns side-by-side on wide screens */
+    justify-content: space-between;
+}
+
+.spirits-column{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    gap: 6px;
+    min-width: 160px;
+}
+
+.spirits-column label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: whitesmoke;
+}
+
+/* Responsive: allow wrapping on smaller screens */
+@media (max-width: 900px) {
+    .row { flex-wrap: wrap; }
+    .leftcolumn { max-width: 100%; flex-basis: 100%; }
+    .rightcolumn { flex-basis: 100%; flex: 1 1 100%; }
+}
+
+/* Stronger rules scoped to profile content to override global styles */
+.content .row {
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    padding: 0 8px !important; /* small horizontal padding */
+    max-width: none !important;
+    width: 100% !important;
+}
+
+.content .leftcolumn {
+    margin-left: 0 !important;
+    margin-right: 12px !important;
+    max-width: 600px !important;
+}
+
+.content .rightcolumn {
+    flex: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding-left: 12px !important;
+}
+
+/* Force a strict two-column layout to avoid overlap */
+.content .row {
+    display: grid !important;
+    /* Two equal columns */
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 12px !important;
+    align-items: start !important;
+}
+
+.content .leftcolumn {
+    max-width: none !important;
+    padding-right: 8px !important;
+}
+
+.content .details {
+    width: 100% !important;
+}
+
+@media (max-width: 700px) {
+    .spirits-columns{
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .spirits-column{ min-width: 100%; }
+    .cocktail-row { grid-template-columns: 1fr 64px minmax(120px, 1fr); }
 }
 
 .boozy{
@@ -190,7 +276,6 @@ h3 {
     flex-direction: row;
     align-items: center;
 }
-
 
 button {
     font-size: 16px;

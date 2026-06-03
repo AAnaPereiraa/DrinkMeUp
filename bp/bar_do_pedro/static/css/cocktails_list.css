@@ -96,3 +96,85 @@ a:hover, a:active {
     color: whitesmoke;
 }
 
+/* Modal styles */
+.modal-overlay{
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+    z-index: 2000;
+    padding: 20px; /* keep modal away from edges */
+    box-sizing: border-box;
+}
+
+.modal-content{
+    background: rgba(20,20,20,0.98);
+    padding: 18px;
+    border-radius: 8px;
+    width: min(700px, 96vw);
+    max-width: 96vw;
+    max-height: 80vh; /* bound height inside viewport */
+    color: whitesmoke;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content #modalBody{
+    overflow-y: auto; /* single scroll container for modal */
+    padding-top: 6px;
+    flex: 1 1 auto;
+}
+
+.modal-close{
+    background: transparent;
+    color: #fff;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+/* Ensure lists inside modal are readable and don't overflow */
+.modal-content ul{
+    /* Let the modalBody handle scrolling; keep list natural height */
+    max-height: none;
+    overflow: visible;
+    padding-left: 0;
+    margin: 0;
+}
+.modal-content li{ padding: 8px 0; }
+
+/* Modal title styling: centered and larger than list names */
+#modalTitle{
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin: 6px 0 10px 0;
+    letter-spacing: 0.4px;
+}
+
+/* Slightly larger and clearer link styles inside modal */
+.modal-content a.alist{
+    color: whitesmoke;
+    font-size: 1.05rem;
+    text-decoration: none;
+}
+.modal-content a.alist:hover{ text-decoration: underline; }
+
+.grouped-list{
+    display: flex;
+    gap: 14px;
+    margin-top: 18px;
+}
+.group .button{
+    min-width: 120px;
+    padding: 12px 18px;
+    font-weight: 700;
+}
+.hidden-list ul{ list-style: none; padding-left: 0; }
+.hidden-list li{ padding: 6px 0; }
+

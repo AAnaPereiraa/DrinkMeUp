@@ -18,10 +18,16 @@
         <div class="leftcolumn"> 
             <h2>My Cocktails</h2>  
             <div class="details" >
+                <div class="cocktail-row header-row">
+                    <div class="cocktail-name">Cocktail</div>
+                    <div class="cocktail-rate">Rate</div>
+                    <div class="cocktail-comment">Comment</div>
+                </div>
                 {% for x in drinks %}
                 <div class="cocktail-row">
                     <div class="cocktail-name"><a href="{% url 'details' x.drink.pk %}" style="text-decoration: none; color: whitesmoke">{{ x.cocktail }}</a></div>
                     <div class="cocktail-rate">{{ x.rate }}</div>
+                    <div class="cocktail-comment">{{ x.comment }}</div>
                 </div>
                 {% endfor %}
             </div>
@@ -53,15 +59,17 @@
                         </fieldset>  <br>
                         <fieldset class="spirits" >
                         <label for="spirit"> <h3>Spirits: </h3></label><br>
-                            <label><input name="spirit" value="Vodka" id="spirit" type="checkbox" class="inline"/>Vodka</label>
-                            <label><input name="spirit" value="Gin" id="spirit" type="checkbox" class="inline"/>Gin</label>
-                            <label><input name="spirit" value="Whisky" id="spirit" type="checkbox" class="inline"/>Whisky</label>
-                            <label><input name="spirit" value="Tequila" id="spirit" type="checkbox" class="inline"/>Tequila</label>
-                            <label><input name="spirit" value="Tequila" id="spirit" type="checkbox" class="inline"/>Cachaca</label>
-                            <label><input name="spirit" value="Tequila" id="spirit" type="checkbox" class="inline"/>Bourbon</label>
-                            <label><input name="spirit" value="Tequila" id="spirit" type="checkbox" class="inline"/>Rum</label>
-                            <label><input name="spirit" value="Tequila" id="spirit" type="checkbox" class="inline"/>Cognac</label>
-                            <label><input name="spirit" value="Tequila" id="spirit" type="checkbox" class="inline"/>Aperol</label>
+                            <div class="spirits-columns">
+                                {% for column in spirits_columns %}
+                                    <div class="spirits-column">
+                                        {% for spirit in column %}
+                                            <label>
+                                                <input name="spirit" value="{{ spirit }}" id="spirit_{{ forloop.parentloop.counter }}_{{ forloop.counter }}" type="checkbox" class="inline" {% if spirit in selected_spirits %}checked{% endif %}/> {{ spirit }}
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </fieldset> <br>
                         <fieldset class="boozy">
                         <label for="strength"><h3>Boozy: </h3></label>

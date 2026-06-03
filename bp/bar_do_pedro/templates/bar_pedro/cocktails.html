@@ -10,35 +10,88 @@
 
 {% block content %}
 
-<div class="content">
-    <div class="greetings">
-        <div class="hello">
-            <h1>Voilá</h1>
-            <h1 style="text-transform: capitalize; margin-left: 10px;">{{user.username}}</h1>
+<div class="container mt-5">
+    <div class="greetings text-center mb-4">
+        <h1>Voilá</h1>
+        <h3 class="text-capitalize">{{ user.username }}</h3>
+    </div>
+
+    <div class="card cocktail-card mb-4">
+        <div class="row no-gutters align-items-center">
+            <div class="col-md-5">
+                {% if cocktails.image %}
+                    <img src="{{ cocktails.image.url }}" class="card-img cocktail-image img-fluid" alt="{{ cocktails.cocktail }}">
+                {% else %}
+                    <div class="card-img cocktail-image placeholder-image d-flex align-items-center justify-content-center">
+                        <span class="placeholder-text">No image</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-7">
+                <div class="card-body text-light">
+                    <h2 class="card-title">{{ cocktails.cocktail }}</h2>
+
+                    <h5>Ingredients</h5>
+                    <p class="ingredients">{{ cocktails.ingredients|linebreaksbr }}</p>
+
+                    <h5>Instructions</h5>
+                    <p class="instructions">{{ cocktails.instructions|linebreaksbr }}</p>
+
+                    <div class="d-flex justify-content-center mt-4">
+                        <form action="" method="post" class="d-inline-block mr-2">
+                            {% csrf_token %}
+                            <button type="submit" name="action" value="DMU" class="nav-cta btn-pill">Get me another one!</button>
+                        </form>
+                        <button type="button" name="action" value="YES" data-toggle="modal" data-target="#myModal" class="nav-cta btn-pill">Made it!</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-<div class="row">
-    <div class="cocktail_option">
-        <div class="info">
-            <div class="name_image">
-                <h1>{{ cocktails.cocktail }}</h1>
-                <img src="/media/cocktails/espresso_martini.jpg" alt="cocktail-image">
-            </div>
-            <div class="details">
-                <h2>Ingredients</h2><br> 
-                <pre style="color: whitesmoke;">{{ cocktails.ingredients|linebreaks }}</pre>
-                <br><br>
-                <h2>instructions</h2><br> 
-                <pre style="color: whitesmoke;">{{ cocktails.instructions|linebreaks }}</pre>
+
+{% comment %} Modal unchanged, kept for rating/comments {% endcomment %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">How was your experience with {{ cocktails.cocktail }}</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Cocktail Form -->
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="0" name="rate" value="Hate it!">
+                            <label class="form-check-label" for="hate">Hate it!</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="1" name="rate" value="Not bad!">
+                            <label class="form-check-label" for="notbad">Not bad!</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="2" name="rate" value="Well, nice!">
+                            <label class="form-check-label" for="nice">Well, nice!</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="3" name="rate" value="That's the one, loved!">
+                            <label class="form-check-label" for="loved">That's the one, loved!</label>
+                        </div>
+                        <div class="form-group mt-2">
+                            <input type="text" name="comment" id="comment" class="form-control" placeholder="Add here your comment for future reference">
+                        </div>
+                        <button type="submit" name="action" value="YES" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
             </div>
         </div>
-        <br><br>
-        <form action="" method="post" class="tasteform">
-            {% csrf_token %}
-            <button type="submit" name="action" value="DMU" class="DMU" >Get me another one!</button>
-            <button type="button" name="action" value="YES" data-toggle="modal" data-target="#myModal" class="done" >Made it!</button>
-        </form>
     </div>
+
+    <!-- Include JQuery, Bootstrap JS for modal functionality -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

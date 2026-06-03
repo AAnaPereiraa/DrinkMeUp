@@ -117,11 +117,33 @@ def profile_view(request):
     user_profile = UserProfile.objects.get(user=user)
     latest_post =  user_profile.latest_post
     user_drinks = DrinksMade.objects.filter(user=user.username).order_by('-id')[:10]
-        
+
+    # Build a dynamic list of all spirits present in the Drinks table
+    all_spirits = set()
+    for s in Drinks.objects.values_list('spirits', flat=True):
+        if s:
+            for part in s.split(','):
+                sp = part.strip()
+                if sp:
+                    all_spirits.add(sp)
+    available_spirits = sorted(all_spirits)
+
+    # Selected spirits from the user's profile (for pre-checking boxes)
+    selected_spirits = [sp.strip() for sp in user_profile.spirits.split(',') if sp.strip()]
+
+    # If a recent order was placed, clear the rendered selected spirits so checkboxes appear unchecked
+    if request.session.pop('clear_spirits', False):
+        selected_spirits = []
+
+    # Split the available spirits into columns of at most 10 items each
+    spirits_columns = [available_spirits[i:i + 10] for i in range(0, len(available_spirits), 10)]
+
     context = {
         'member': user_profile,
         'motivational_msg': latest_post,
-        'drinks': user_drinks,    
+        'drinks': user_drinks,
+        'spirits_columns': spirits_columns,
+        'selected_spirits': selected_spirits,
     }
     
     if request.method == 'POST':
@@ -133,6 +155,10 @@ def profile_view(request):
         
         # Save the data correctly
         user_profile.save()
+        # Clear any previously stored cocktail suggestion so new preferences get a fresh match
+        request.session.pop('selected_cocktail', None)
+        # After clicking 'Drink me up' clear the rendered spirit checkboxes on next profile view
+        request.session['clear_spirits'] = True
         return redirect('cocktails')
    
     return render(request, 'bar_pedro/profile.html', context)
@@ -146,28 +172,57 @@ def cocktails(request):
     boozy = user_profile.boozy
     taste = user_profile.taste
     spirits = user_profile.spirits
-    spirits_list = [spirit.strip() for spirit in spirits.split(',')]
+    spirits_list = [spirit.strip() for spirit in spirits.split(',') if spirit.strip()]
     spirits_pattern = "|".join(spirits_list)
-   
-    #match the drinks based on preferences
-    
+
+    # match the drinks based on preferences
     match1 = Drinks.objects.filter(boozy=boozy, taste=taste)
-    match2 = match1.filter(spirits__regex=rf'\b({spirits_pattern})\b').values()
+    if spirits_list:
+        match2_qs = match1.filter(spirits__regex=rf'\b({spirits_pattern})\b')
+    else:
+        match2_qs = match1
+
+    match2 = list(match2_qs.values())
 
     try:
-        # Check if a cocktail suggestion is already stored in the session
+        cocktail_suggestion = None
+
+        # If a suggestion is already stored in session, validate it against current prefs
         if 'selected_cocktail' in request.session:
-            cocktail_suggestion = request.session['selected_cocktail']
-        else:
-            cocktail_suggestion = random.choice(list(match2))
-            request.session['selected_cocktail'] = cocktail_suggestion  # Store in session
+            stored = request.session['selected_cocktail']
+            # Try to validate by id first
+            sc_id = stored.get('id') or stored.get('pk')
+            if sc_id:
+                valid = match1.filter(pk=sc_id).exists()
+                if spirits_list and valid:
+                    valid = match1.filter(pk=sc_id, spirits__regex=rf'\b({spirits_pattern})\b').exists()
+                if valid:
+                    cocktail_suggestion = stored
+            else:
+                # Fallback: validate by cocktail name
+                name = stored.get('cocktail')
+                if name:
+                    valid_qs = match1.filter(cocktail=name)
+                    if spirits_list:
+                        valid_qs = valid_qs.filter(spirits__regex=rf'\b({spirits_pattern})\b')
+                    if valid_qs.exists():
+                        cocktail_suggestion = stored
+
+        # If no valid stored suggestion, pick a new one from match2
+        if not cocktail_suggestion:
+            if not match2:
+                raise IndexError
+            cocktail_suggestion = random.choice(match2)
+            request.session['selected_cocktail'] = cocktail_suggestion
 
         context = {
             'member': user_profile,
             'motivational_msg': latest_post,
-            'cocktails': cocktail_suggestion,     
+            'cocktails': cocktail_suggestion,
         }
-    
+        # Clear any previous 'no match' message now that we have a valid suggestion
+        request.session.pop('message', None)
+
     except IndexError:
         request.session['message'] = "Unfortunately there is no cocktail match!!! Please try again =)"
         return redirect("profile")
@@ -198,7 +253,9 @@ def cocktails(request):
             
             # Clear the selected cocktail from the session after saving
             del request.session['selected_cocktail']
-            
+            # Signal profile view to clear the spirit checkboxes on next render
+            request.session['clear_spirits'] = True
+
             return redirect("profile")       
         
         return render(request, 'bar_pedro/cocktails.html', context)

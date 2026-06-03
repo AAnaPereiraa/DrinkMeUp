@@ -27,7 +27,7 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     color: whitesmoke;
 }
 
@@ -111,6 +111,90 @@ h1 {
 
 }
 
+.cocktail-card{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible;
+}
+
+.cocktail-image{
+    width: 100%;
+    height: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    display: block;
+}
+
+.placeholder-image{
+    background: rgba(255,255,255,0.06);
+    height: 100%;
+    min-height: 260px;
+}
+
+/* Ensure card body inherits transparent background */
+.cocktail-card .card-body{
+    background: transparent !important;
+    color: #fff;
+}
+
+/* Navbar-like CTA used on cocktails page */
+.nav-cta{
+    background-color: #d19b4e !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    border-radius: 18px !important;
+    padding-block: 6px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    border: none !important;
+    text-decoration: none !important;
+}
+.nav-cta:hover{
+    background-color: #c08f48 !important;
+    color: #fff !important;
+}
+
+/* Ensure nav-cta anchors render like buttons */
+.nav-cta{ display: inline-block; }
+
+/* Slight variant for Bar if needed */
+.bar-cta{ border-radius: 18px !important; padding: 6px 16px !important; }
+
+.placeholder-text{
+    color: #ddd;
+    font-weight: 600;
+}
+
+.ingredients, .instructions{
+    color: #f4f4f4;
+    line-height: 1.5;
+}
+
+.btn-pill{ 
+    border-radius: 30px;
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+/* Remove or darken default white backgrounds from Bootstrap modal and form controls */
+.modal-content{
+    background: rgba(0,0,0,0.6) !important;
+    border: none;
+    color: #fff;
+}
+.modal-header, .modal-body, .modal-footer{
+    background: transparent !important;
+    border: none !important;
+    color: #fff;
+}
+.modal .form-control{
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    color: #fff !important;
+}
+.modal .form-control::placeholder{ color: rgba(255,255,255,0.6) !important; }
+
 .tasteform{
     display: flex;
     flex-direction: row;
@@ -127,4 +211,10 @@ h1 {
 .done {
     margin-left: 5px;
     border-radius: 30px;
+}
+
+/* Specific style for the Bar button: more oval, less rounded */
+.bar-btn{
+    border-radius: 12px !important;
+    padding: 8px 26px !important;
 }

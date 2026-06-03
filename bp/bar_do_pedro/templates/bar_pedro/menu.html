@@ -10,13 +10,72 @@
 <div style="display:block; margin-top:100px; margin-left: 10px"> 
     <div class="details" >
         <h1>Cocktails List</h1>
-        <div class="list">
-            {% for x in menu %}
-                <ul>
-                    <a href="{% url 'details' x.id %}" class="alist"><li>{{x.cocktail}}</li></a>
-                </ul>
-            {% endfor %}
+        <div class="list grouped-list">
+            <div class="group">
+                <button class="button group-btn" data-group="Light">Light</button>
+                <div class="hidden-list" id="list-Light" style="display:none;">
+                    <ul>
+                    {% for x in menu %}{% if x.boozy == 'Light' %}
+                        <li><a href="{% url 'details' x.id %}" class="alist">{{ x.cocktail }}</a></li>
+                    {% endif %}{% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="group">
+                <button class="button group-btn" data-group="Medium">Medium</button>
+                <div class="hidden-list" id="list-Medium" style="display:none;">
+                    <ul>
+                    {% for x in menu %}{% if x.boozy == 'Medium' %}
+                        <li><a href="{% url 'details' x.id %}" class="alist">{{ x.cocktail }}</a></li>
+                    {% endif %}{% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="group">
+                <button class="button group-btn" data-group="Strong">Strong</button>
+                <div class="hidden-list" id="list-Strong" style="display:none;">
+                    <ul>
+                    {% for x in menu %}{% if x.boozy == 'Strong' %}
+                        <li><a href="{% url 'details' x.id %}" class="alist">{{ x.cocktail }}</a></li>
+                    {% endif %}{% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
+
+        <!-- Modal for showing lists -->
+        <div id="menuModal" class="modal-overlay" style="display:none;">
+            <div class="modal-content">
+                <button id="modalClose" class="modal-close">×</button>
+                <h3 id="modalTitle">Group</h3>
+                <div id="modalBody"></div>
+            </div>
+        </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const buttons = document.querySelectorAll('.group-btn');
+            const modal = document.getElementById('menuModal');
+            const modalBody = document.getElementById('modalBody');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalClose = document.getElementById('modalClose');
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const group = btn.getAttribute('data-group');
+                    const src = document.getElementById('list-' + group);
+                    modalTitle.textContent = group + ' cocktails';
+                    modalBody.innerHTML = src ? src.innerHTML : '<p>No drinks</p>';
+                    modal.style.display = 'flex';
+                });
+            });
+
+            modalClose.addEventListener('click', () => { modal.style.display = 'none'; });
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+        });
+        </script>
     </div>
 </div>
 
