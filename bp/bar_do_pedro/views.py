@@ -128,12 +128,8 @@ def profile_view(request):
                     all_spirits.add(sp)
     available_spirits = sorted(all_spirits)
 
-    # Selected spirits from the user's profile (for pre-checking boxes)
-    selected_spirits = [sp.strip() for sp in user_profile.spirits.split(',') if sp.strip()]
-
-    # If a recent order was placed, clear the rendered selected spirits so checkboxes appear unchecked
-    if request.session.pop('clear_spirits', False):
-        selected_spirits = []
+    # Always show unchecked spirit boxes on the bar page.
+    selected_spirits = []
 
     # Split the available spirits into columns of at most 10 items each
     spirits_columns = [available_spirits[i:i + 10] for i in range(0, len(available_spirits), 10)]
@@ -157,8 +153,6 @@ def profile_view(request):
         user_profile.save()
         # Clear any previously stored cocktail suggestion so new preferences get a fresh match
         request.session.pop('selected_cocktail', None)
-        # After clicking 'Drink me up' clear the rendered spirit checkboxes on next profile view
-        request.session['clear_spirits'] = True
         return redirect('cocktails')
    
     return render(request, 'bar_pedro/profile.html', context)
@@ -247,14 +241,13 @@ def cocktails(request):
         
             DrinksMade.objects.create(user=username, cocktail=cocktail, rate=rate, comment=comment, drink=drink)
             
-            # Update latest post with a random message
+            # Update latest post with a random message and reset spirit picks for next order
             user_profile.latest_post = random.choice(get_file_content_as_list(RESPONSE_FILE))
+            user_profile.spirits = ""
             user_profile.save()
             
             # Clear the selected cocktail from the session after saving
             del request.session['selected_cocktail']
-            # Signal profile view to clear the spirit checkboxes on next render
-            request.session['clear_spirits'] = True
 
             return redirect("profile")       
         

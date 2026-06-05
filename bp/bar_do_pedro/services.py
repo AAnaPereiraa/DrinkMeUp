@@ -147,6 +147,7 @@ def record_drink_made(user, rate: str, comment: str) -> DrinksMade:
     messages = get_file_content_as_list(RESPONSE_FILE)
     if messages:
         user_profile.latest_post = random.choice(messages)
+    user_profile.spirits = ""
     user_profile.save()
     clear_stored_suggestion(user.id)
     return drinks_made
