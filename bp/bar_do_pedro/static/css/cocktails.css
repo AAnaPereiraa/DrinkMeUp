@@ -166,6 +166,25 @@ h1 {
     font-weight: 600;
 }
 
+.cocktail-info-page {
+    margin-top: 80px;
+}
+
+.cocktail-info-actions {
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.cocktail-info-page .card-title {
+    margin-bottom: 1rem;
+}
+
+.cocktail-info-page h5 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
 .ingredients, .instructions{
     color: #f4f4f4;
     line-height: 1.5;

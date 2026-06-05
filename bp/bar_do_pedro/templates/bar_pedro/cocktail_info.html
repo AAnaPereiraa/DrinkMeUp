@@ -7,28 +7,40 @@
 <link rel="stylesheet" href="{% static 'css/cocktails.css' %}">
 {% endblock %}
 
-{% block title %}Bar{% endblock %}
+{% block title %}{{ cocktail.cocktail }}{% endblock %}
 
 {% block content %}
 
-<div style="display:block; margin-top:100px; margin-left: 10px">
-    <div>
-        <h1>{{cocktail.cocktail}}</h1>
-    </div>  
-    <div class="details" >
-        {% if cocktail.image %}
-            <img src="{{cocktail.image.url}}" alt="cocktail_image"><br><br>
-        {% endif %}
-        <p>ingredients:</p>
-        <pre style="color: whitesmoke;">{{cocktail.ingredients|linebreaksbr }}</pre> <br><br>
-        <p>Instructions:</p>
-        <pre style="color: whitesmoke;">{{cocktail.instructions|linebreaksbr }}</pre> <br><br>
-    </div>
-    <div>
-        <a href="{% url 'menu' %}" class="nav-cta">Menu</a>
-        <a href="{% url 'profile' %}" class="nav-cta bar-cta">Bar</a>
+<div class="container mt-5 cocktail-info-page">
+    <div class="card cocktail-card mb-4">
+        <div class="row no-gutters align-items-center">
+            <div class="col-md-5">
+                {% if cocktail.image %}
+                    <img src="{{ cocktail.image.url }}" class="card-img cocktail-image img-fluid" alt="{{ cocktail.cocktail }}">
+                {% else %}
+                    <div class="card-img cocktail-image placeholder-image d-flex align-items-center justify-content-center">
+                        <span class="placeholder-text">No image</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-7">
+                <div class="card-body text-light">
+                    <h2 class="card-title">{{ cocktail.cocktail }}</h2>
+
+                    <h5>Ingredients</h5>
+                    <p class="ingredients">{{ cocktail.ingredients|linebreaksbr }}</p>
+
+                    <h5>Instructions</h5>
+                    <p class="instructions">{{ cocktail.instructions|linebreaksbr }}</p>
+
+                    <div class="d-flex justify-content-center mt-4 cocktail-info-actions">
+                        <a href="{% url 'menu' %}" class="nav-cta btn-pill mr-2">Menu</a>
+                        <a href="{% url 'profile' %}" class="nav-cta btn-pill bar-cta">Bar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
 
 {% endblock %}
