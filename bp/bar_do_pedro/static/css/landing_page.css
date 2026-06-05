@@ -59,23 +59,41 @@ body {
 }
 
 
-.join-us-btn {
+.landing-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+    align-self: flex-start;
+}
+
+.landing-btn {
     color: whitesmoke;
     background: #d19b4e;
-    padding: 10px;
+    padding: 10px 20px;
     border: none;
     border-radius: 16px;
-    align-self: flex-start;
     font-size: 15px;
     width: fit-content;
     cursor: pointer;
-    transition: all .55s ease;
+    transition: all 0.55s ease;
     text-decoration: none;
-    margin-top: 20px;
+    text-align: center;
 }
 
-.join-us-btn:hover {
+.landing-btn:hover {
     background: limegreen;
     color: #292929;
-    transform: translateX(4px)
+    transform: translateX(4px);
+}
+
+.login-btn {
+    background: transparent;
+    border: 2px solid #d19b4e;
+}
+
+.login-btn:hover {
+    background: rgba(209, 155, 78, 0.25);
+    color: whitesmoke;
 }
