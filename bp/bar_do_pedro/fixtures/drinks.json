@@ -1,0 +1,1029 @@
+[
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 1,
+    "fields": {
+      "cocktail": "Martini",
+      "spirits": "Gin, Vermouth",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Gin, Vermouth, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Vermouth with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 2,
+    "fields": {
+      "cocktail": "Margarita",
+      "spirits": "Tequila, Triple Sec",
+      "taste": "Citrus",
+      "boozy": "Medium",
+      "ingredients": "Tequila, Triple Sec, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Tequila, Triple Sec with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 3,
+    "fields": {
+      "cocktail": "Old Fashioned",
+      "spirits": "Whiskey",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Whiskey, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Whiskey with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 4,
+    "fields": {
+      "cocktail": "Negroni",
+      "spirits": "Gin, Vermouth, Campari",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Gin, Vermouth, Campari, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Vermouth, Campari with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 5,
+    "fields": {
+      "cocktail": "Mojito",
+      "spirits": "White Rum",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "White Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine White Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 6,
+    "fields": {
+      "cocktail": "Manhattan",
+      "spirits": "Rye Whiskey, Vermouth",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Rye Whiskey, Vermouth, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rye Whiskey, Vermouth with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 7,
+    "fields": {
+      "cocktail": "Daiquiri",
+      "spirits": "White Rum",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "White Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine White Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 8,
+    "fields": {
+      "cocktail": "Whiskey Sour",
+      "spirits": "Whiskey",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "Whiskey, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Whiskey with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 9,
+    "fields": {
+      "cocktail": "Cosmopolitan",
+      "spirits": "Vodka, Triple Sec",
+      "taste": "Fruity",
+      "boozy": "Medium",
+      "ingredients": "Vodka, Triple Sec, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka, Triple Sec with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 10,
+    "fields": {
+      "cocktail": "Moscow Mule",
+      "spirits": "Vodka",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Vodka, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 11,
+    "fields": {
+      "cocktail": "Piña Colada",
+      "spirits": "White Rum",
+      "taste": "Sweet",
+      "boozy": "Light",
+      "ingredients": "White Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine White Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 12,
+    "fields": {
+      "cocktail": "Sazerac",
+      "spirits": "Rye Whiskey, Absinthe",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Rye Whiskey, Absinthe, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rye Whiskey, Absinthe with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 13,
+    "fields": {
+      "cocktail": "Sidecar",
+      "spirits": "Cognac, Triple Sec",
+      "taste": "Citrus",
+      "boozy": "Medium",
+      "ingredients": "Cognac, Triple Sec, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Cognac, Triple Sec with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 14,
+    "fields": {
+      "cocktail": "Tom Collins",
+      "spirits": "Gin",
+      "taste": "Citrus",
+      "boozy": "Light",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 15,
+    "fields": {
+      "cocktail": "Gimlet",
+      "spirits": "Gin",
+      "taste": "Citrus",
+      "boozy": "Medium",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 16,
+    "fields": {
+      "cocktail": "Mai Tai",
+      "spirits": "Rum, Orange Liqueur",
+      "taste": "Fruity",
+      "boozy": "Medium",
+      "ingredients": "Rum, Orange Liqueur, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rum, Orange Liqueur with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 17,
+    "fields": {
+      "cocktail": "French 75",
+      "spirits": "Gin, Champagne",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Gin, Champagne, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Champagne with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 18,
+    "fields": {
+      "cocktail": "Bloody Mary",
+      "spirits": "Vodka",
+      "taste": "Savory",
+      "boozy": "Medium",
+      "ingredients": "Vodka, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 19,
+    "fields": {
+      "cocktail": "Paloma",
+      "spirits": "Tequila",
+      "taste": "Citrus",
+      "boozy": "Light",
+      "ingredients": "Tequila, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Tequila with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 20,
+    "fields": {
+      "cocktail": "Vesper Martini",
+      "spirits": "Gin, Vodka",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Gin, Vodka, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Vodka with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 21,
+    "fields": {
+      "cocktail": "Cuba Libre",
+      "spirits": "White Rum",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "White Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine White Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 22,
+    "fields": {
+      "cocktail": "Mint Julep",
+      "spirits": "Bourbon",
+      "taste": "Fresh",
+      "boozy": "Medium",
+      "ingredients": "Bourbon, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Bourbon with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 23,
+    "fields": {
+      "cocktail": "Singapore Sling",
+      "spirits": "Gin",
+      "taste": "Fruity",
+      "boozy": "Medium",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 24,
+    "fields": {
+      "cocktail": "Aperol Spritz",
+      "spirits": "Prosecco, Aperol",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Prosecco, Aperol, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Prosecco, Aperol with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 25,
+    "fields": {
+      "cocktail": "Dark 'n' Stormy",
+      "spirits": "Dark Rum",
+      "taste": "Fresh",
+      "boozy": "Medium",
+      "ingredients": "Dark Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Dark Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 26,
+    "fields": {
+      "cocktail": "Irish Coffee",
+      "spirits": "Irish Whiskey",
+      "taste": "Sweet",
+      "boozy": "Medium",
+      "ingredients": "Irish Whiskey, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Irish Whiskey with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 27,
+    "fields": {
+      "cocktail": "White Russian",
+      "spirits": "Vodka, Kahlua",
+      "taste": "Sweet",
+      "boozy": "Medium",
+      "ingredients": "Vodka, Kahlua, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka, Kahlua with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 28,
+    "fields": {
+      "cocktail": "Black Russian",
+      "spirits": "Vodka, Kahlua",
+      "taste": "Sweet",
+      "boozy": "Medium",
+      "ingredients": "Vodka, Kahlua, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka, Kahlua with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 29,
+    "fields": {
+      "cocktail": "Espresso Martini",
+      "spirits": "Vodka, Coffee Liqueur",
+      "taste": "Bitter",
+      "boozy": "Medium",
+      "ingredients": "Vodka, Coffee Liqueur, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka, Coffee Liqueur with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 30,
+    "fields": {
+      "cocktail": "Ramos Gin Fizz",
+      "spirits": "Gin",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 31,
+    "fields": {
+      "cocktail": "Bellini",
+      "spirits": "Prosecco",
+      "taste": "Fruity",
+      "boozy": "Light",
+      "ingredients": "Prosecco, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Prosecco with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 32,
+    "fields": {
+      "cocktail": "Aviation",
+      "spirits": "Gin",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 33,
+    "fields": {
+      "cocktail": "Caipirinha",
+      "spirits": "Cachaça",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "Cachaça, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Cachaça with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 34,
+    "fields": {
+      "cocktail": "Amaretto Sour",
+      "spirits": "Amaretto",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "Amaretto, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Amaretto with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 35,
+    "fields": {
+      "cocktail": "Brandy Alexander",
+      "spirits": "Brandy",
+      "taste": "Sweet",
+      "boozy": "Medium",
+      "ingredients": "Brandy, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Brandy with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 36,
+    "fields": {
+      "cocktail": "Rusty Nail",
+      "spirits": "Scotch, Drambuie",
+      "taste": "Smoky",
+      "boozy": "Strong",
+      "ingredients": "Scotch, Drambuie, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Scotch, Drambuie with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 37,
+    "fields": {
+      "cocktail": "Boulevardier",
+      "spirits": "Bourbon, Vermouth, Campari",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Bourbon, Vermouth, Campari, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Bourbon, Vermouth, Campari with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 38,
+    "fields": {
+      "cocktail": "Paper Plane",
+      "spirits": "Bourbon, Amaro, Aperol",
+      "taste": "Bitter",
+      "boozy": "Medium",
+      "ingredients": "Bourbon, Amaro, Aperol, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Bourbon, Amaro, Aperol with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 39,
+    "fields": {
+      "cocktail": "Penicillin",
+      "spirits": "Blended Scotch, Islay Scotch",
+      "taste": "Smoky",
+      "boozy": "Strong",
+      "ingredients": "Blended Scotch, Islay Scotch, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Blended Scotch, Islay Scotch with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 40,
+    "fields": {
+      "cocktail": "Vieux Carré",
+      "spirits": "Rye Whiskey, Cognac, Vermouth",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Rye Whiskey, Cognac, Vermouth, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rye Whiskey, Cognac, Vermouth with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 41,
+    "fields": {
+      "cocktail": "Clover Club",
+      "spirits": "Gin",
+      "taste": "Fruity",
+      "boozy": "Light",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 42,
+    "fields": {
+      "cocktail": "Hurricane",
+      "spirits": "Rum",
+      "taste": "Fruity",
+      "boozy": "Medium",
+      "ingredients": "Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 43,
+    "fields": {
+      "cocktail": "Zombie",
+      "spirits": "Rum",
+      "taste": "Fruity",
+      "boozy": "Strong",
+      "ingredients": "Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 44,
+    "fields": {
+      "cocktail": "Long Island Iced Tea",
+      "spirits": "Vodka, Gin, Tequila, Rum, Triple Sec",
+      "taste": "Sweet",
+      "boozy": "Strong",
+      "ingredients": "Vodka, Gin, Tequila, Rum, Triple Sec, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka, Gin, Tequila, Rum, Triple Sec with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 45,
+    "fields": {
+      "cocktail": "Tequila Sunrise",
+      "spirits": "Tequila",
+      "taste": "Fruity",
+      "boozy": "Light",
+      "ingredients": "Tequila, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Tequila with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 46,
+    "fields": {
+      "cocktail": "Harvey Wallbanger",
+      "spirits": "Vodka, Galliano",
+      "taste": "Sweet",
+      "boozy": "Light",
+      "ingredients": "Vodka, Galliano, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka, Galliano with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 47,
+    "fields": {
+      "cocktail": "Pisco Sour",
+      "spirits": "Pisco",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "Pisco, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Pisco with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 48,
+    "fields": {
+      "cocktail": "Fuzzy Navel",
+      "spirits": "Peach Schnapps",
+      "taste": "Sweet",
+      "boozy": "Light",
+      "ingredients": "Peach Schnapps, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Peach Schnapps with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 49,
+    "fields": {
+      "cocktail": "Godfather",
+      "spirits": "Scotch, Amaretto",
+      "taste": "Smoky",
+      "boozy": "Strong",
+      "ingredients": "Scotch, Amaretto, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Scotch, Amaretto with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 50,
+    "fields": {
+      "cocktail": "Godmother",
+      "spirits": "Vodka, Amaretto",
+      "taste": "Sweet",
+      "boozy": "Medium",
+      "ingredients": "Vodka, Amaretto, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka, Amaretto with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 51,
+    "fields": {
+      "cocktail": "Cable Car",
+      "spirits": "Spiced Rum",
+      "taste": "Fresh",
+      "boozy": "Medium",
+      "ingredients": "Spiced Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Spiced Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 52,
+    "fields": {
+      "cocktail": "Painkiller",
+      "spirits": "Rum",
+      "taste": "Sweet",
+      "boozy": "Medium",
+      "ingredients": "Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 53,
+    "fields": {
+      "cocktail": "Sea Breeze",
+      "spirits": "Vodka",
+      "taste": "Fruity",
+      "boozy": "Light",
+      "ingredients": "Vodka, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 54,
+    "fields": {
+      "cocktail": "Sex on the Beach",
+      "spirits": "Vodka, Peach Schnapps",
+      "taste": "Fruity",
+      "boozy": "Light",
+      "ingredients": "Vodka, Peach Schnapps, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka, Peach Schnapps with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 55,
+    "fields": {
+      "cocktail": "Planter's Punch",
+      "spirits": "Rum",
+      "taste": "Fruity",
+      "boozy": "Medium",
+      "ingredients": "Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 56,
+    "fields": {
+      "cocktail": "Suffering Bastard",
+      "spirits": "Brandy, Gin",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Brandy, Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Brandy, Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 57,
+    "fields": {
+      "cocktail": "French Martini",
+      "spirits": "Vodka, Raspberry Liqueur",
+      "taste": "Fruity",
+      "boozy": "Light",
+      "ingredients": "Vodka, Raspberry Liqueur, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka, Raspberry Liqueur with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 58,
+    "fields": {
+      "cocktail": "White Lady",
+      "spirits": "Gin, Cointreau",
+      "taste": "Citrus",
+      "boozy": "Light",
+      "ingredients": "Gin, Cointreau, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Cointreau with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 59,
+    "fields": {
+      "cocktail": "Corpse Reviver #2",
+      "spirits": "Gin, Cointreau, Lillet",
+      "taste": "Citrus",
+      "boozy": "Medium",
+      "ingredients": "Gin, Cointreau, Lillet, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Cointreau, Lillet with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 60,
+    "fields": {
+      "cocktail": "Gin Fizz",
+      "spirits": "Gin",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 61,
+    "fields": {
+      "cocktail": "Southside",
+      "spirits": "Gin",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 62,
+    "fields": {
+      "cocktail": "Bronx",
+      "spirits": "Gin, Vermouth",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Gin, Vermouth, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Vermouth with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 63,
+    "fields": {
+      "cocktail": "John Collins",
+      "spirits": "Bourbon",
+      "taste": "Citrus",
+      "boozy": "Light",
+      "ingredients": "Bourbon, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Bourbon with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 64,
+    "fields": {
+      "cocktail": "Hemingway Daiquiri",
+      "spirits": "White Rum",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "White Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine White Rum with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 65,
+    "fields": {
+      "cocktail": "Tommy's Margarita",
+      "spirits": "Tequila",
+      "taste": "Citrus",
+      "boozy": "Medium",
+      "ingredients": "Tequila, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Tequila with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 66,
+    "fields": {
+      "cocktail": "Sangria",
+      "spirits": "Wine",
+      "taste": "Fruity",
+      "boozy": "Light",
+      "ingredients": "Wine, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Wine with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 67,
+    "fields": {
+      "cocktail": "Hot Toddy",
+      "spirits": "Whiskey",
+      "taste": "Savory",
+      "boozy": "Medium",
+      "ingredients": "Whiskey, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Whiskey with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 68,
+    "fields": {
+      "cocktail": "Mulled Wine",
+      "spirits": "Wine",
+      "taste": "Sweet",
+      "boozy": "Medium",
+      "ingredients": "Wine, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Wine with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 69,
+    "fields": {
+      "cocktail": "Martinez",
+      "spirits": "Gin, Vermouth",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Gin, Vermouth, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Vermouth with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 70,
+    "fields": {
+      "cocktail": "Negroni Sbagliato",
+      "spirits": "Prosecco, Vermouth, Campari",
+      "taste": "Bitter",
+      "boozy": "Light",
+      "ingredients": "Prosecco, Vermouth, Campari, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Prosecco, Vermouth, Campari with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 71,
+    "fields": {
+      "cocktail": "Bramble",
+      "spirits": "Gin",
+      "taste": "Fruity",
+      "boozy": "Light",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 72,
+    "fields": {
+      "cocktail": "Bee's Knees",
+      "spirits": "Gin",
+      "taste": "Citrus",
+      "boozy": "Light",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 73,
+    "fields": {
+      "cocktail": "Last Word",
+      "spirits": "Gin, Green Chartreuse",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Gin, Green Chartreuse, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Green Chartreuse with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 74,
+    "fields": {
+      "cocktail": "Fitzgerald",
+      "spirits": "Gin",
+      "taste": "Bitter",
+      "boozy": "Light",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with lime or lemon juice and sweetener, shake with ice, strain into a chilled glass and garnish.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 75,
+    "fields": {
+      "cocktail": "Algonquin",
+      "spirits": "Rye Whiskey",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Rye Whiskey, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rye Whiskey with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 76,
+    "fields": {
+      "cocktail": "Brown Derby",
+      "spirits": "Bourbon",
+      "taste": "Citrus",
+      "boozy": "Light",
+      "ingredients": "Bourbon, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Bourbon with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 77,
+    "fields": {
+      "cocktail": "Tipperary",
+      "spirits": "Irish Whiskey",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Irish Whiskey, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Irish Whiskey with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 78,
+    "fields": {
+      "cocktail": "Milk Punch",
+      "spirits": "Brandy",
+      "taste": "Sweet",
+      "boozy": "Light",
+      "ingredients": "Brandy, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Brandy with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 79,
+    "fields": {
+      "cocktail": "Gold Rush",
+      "spirits": "Bourbon",
+      "taste": "Sweet",
+      "boozy": "Strong",
+      "ingredients": "Bourbon, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Bourbon with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": ""
+    }
+  }
+]

@@ -1,7 +1,8 @@
 {% extends 'bar_pedro/base.html' %}
 {% load static %}
-{% block head %}  
-  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 {% load socialaccount %}
 {% block title %}SIGNIN{% endblock %}
@@ -35,7 +36,7 @@
             <a href="{% url 'signup' %}">Join us</a>
           </div>
           <div class="google-lgn">
-            <a href="{% provider_login_url 'google' %}"><img src="../../static/google.png" alt="google"class="google-icon">Google login</a>
+            <a href="{% provider_login_url 'google' %}"><img src="{% static 'google.png' %}" alt="google" class="google-icon">Google login</a>
           </div>
         </div>
       </div>

@@ -1,10 +1,11 @@
 {% extends 'bar_pedro/base.html' %}
 {% load static %}
 {% block head %}
+{{ block.super }}
 <link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 
-<title>Delete</title>
+{% block title %}Delete{% endblock %}
 
 {% block content %}
 <div class="login-main">
