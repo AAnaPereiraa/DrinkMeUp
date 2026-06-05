@@ -70,6 +70,21 @@ def is_suggestion_in_pool(stored, match_pool: list) -> bool:
     return stored_id in pool_ids
 
 
+def resolve_drink(stored) -> Drinks:
+    """Return a Drinks model instance from a dict, session data, or model."""
+    if isinstance(stored, Drinks):
+        return stored
+    drink_id = stored.get("id") or stored.get("pk")
+    return Drinks.objects.get(pk=drink_id)
+
+
+def drink_to_session_data(drink) -> dict:
+    """Store only the fields needed to restore a suggestion from session."""
+    if isinstance(drink, dict):
+        return {"id": drink["id"], "cocktail": drink["cocktail"]}
+    return {"id": drink.id, "cocktail": drink.cocktail}
+
+
 def get_matching_drinks(user_profile: UserProfile):
     """Return matching drink queryset and selected spirits list."""
     spirits_list = parse_spirits_list(user_profile.spirits)

@@ -14,6 +14,8 @@ from .services import (
     find_suggestion_pool,
     get_file_content_as_list,
     is_suggestion_in_pool,
+    resolve_drink,
+    drink_to_session_data,
     RESPONSE_FILE,
 )
 
@@ -146,7 +148,7 @@ def profile_view(request):
             request.session.pop('fallback_message', None)
             request.session.pop('show_fallback_prompt', None)
             if match_pool:
-                request.session['selected_cocktail'] = random.choice(match_pool)
+                request.session['selected_cocktail'] = drink_to_session_data(random.choice(match_pool))
                 return redirect('cocktails')
             return redirect('profile')
 
@@ -174,7 +176,7 @@ def profile_view(request):
             return redirect('profile')
 
         if is_exact_match:
-            request.session['selected_cocktail'] = random.choice(match_pool)
+            request.session['selected_cocktail'] = drink_to_session_data(random.choice(match_pool))
             return redirect('cocktails')
 
         request.session['fallback_match_pool'] = match_pool
@@ -204,13 +206,15 @@ def cocktails(request):
             cocktail_suggestion = stored
 
     if not cocktail_suggestion:
-        cocktail_suggestion = random.choice(match_pool)
+        cocktail_suggestion = drink_to_session_data(random.choice(match_pool))
         request.session['selected_cocktail'] = cocktail_suggestion
+
+    cocktail_drink = resolve_drink(cocktail_suggestion)
 
     context = {
         'member': user_profile,
         'motivational_msg': latest_post,
-        'cocktails': cocktail_suggestion,
+        'cocktails': cocktail_drink,
     }
     request.session.pop('message', None)
 
@@ -218,9 +222,9 @@ def cocktails(request):
         action = request.POST.get('action')
 
         if action == "DMU":
-            cocktail_suggestion = random.choice(match_pool)
+            cocktail_suggestion = drink_to_session_data(random.choice(match_pool))
             request.session['selected_cocktail'] = cocktail_suggestion
-            context['cocktails'] = cocktail_suggestion
+            context['cocktails'] = resolve_drink(cocktail_suggestion)
 
         if action == "YES":
             username = user.username
