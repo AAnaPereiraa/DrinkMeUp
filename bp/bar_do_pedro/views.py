@@ -143,12 +143,10 @@ def profile_view(request):
 
         if action == 'accept_fallback':
             match_pool = request.session.pop('fallback_match_pool', None)
-            recommendation_message = request.session.pop('fallback_message', None)
+            request.session.pop('fallback_message', None)
             request.session.pop('show_fallback_prompt', None)
             if match_pool:
                 request.session['selected_cocktail'] = random.choice(match_pool)
-                if recommendation_message:
-                    request.session['recommendation_message'] = recommendation_message
                 return redirect('cocktails')
             return redirect('profile')
 
@@ -165,7 +163,6 @@ def profile_view(request):
 
         user_profile.save()
         request.session.pop('selected_cocktail', None)
-        request.session.pop('recommendation_message', None)
         request.session.pop('fallback_match_pool', None)
         request.session.pop('fallback_message', None)
         request.session.pop('show_fallback_prompt', None)
@@ -200,8 +197,6 @@ def cocktails(request):
         request.session['message'] = computed_message
         return redirect("profile")
 
-    recommendation_message = request.session.pop('recommendation_message', None) or computed_message
-
     cocktail_suggestion = None
     if 'selected_cocktail' in request.session:
         stored = request.session['selected_cocktail']
@@ -216,7 +211,6 @@ def cocktails(request):
         'member': user_profile,
         'motivational_msg': latest_post,
         'cocktails': cocktail_suggestion,
-        'recommendation_message': recommendation_message if recommendation_message else None,
     }
     request.session.pop('message', None)
 
