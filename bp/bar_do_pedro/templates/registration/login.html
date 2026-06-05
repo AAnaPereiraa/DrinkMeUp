@@ -6,40 +6,34 @@
 {% load socialaccount %}
 {% block title %}SIGNIN{% endblock %}
 
-
 {% block content %}
 <div class="login-main">
-  <div class="quote-text">
-    <h2>GET YOUR<br>DRINK</h2>
-  </div>
-  <div class="login-menu" id="login-menu">
-    <div class="login-box">
-      <form action="" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-          <input type="text" name="username" placeholder="Username">
-        </div>
-        <div class="form-group">
-          <input type="password" name="password" placeholder="Password">
-        </div>
-        <div class="login-btn">
-          <button type="submit">Log In</button>
-        </div>
-      </form>
-      <div class="links">
-        <div class="password-reset">
-          <a href="{% url 'password_reset' %}">Forgot your password?</a>
-        </div>
-        <div class="login-bottom">
-          <div class="join-us-btn">
-            <a href="{% url 'signup' %}">Join us</a>
-          </div>
-          <div class="google-lgn">
-            <a href="{% provider_login_url 'google' %}"><img src="{% static 'google.png' %}" alt="google" class="google-icon">Google login</a>
-          </div>
-        </div>
-      </div>
+    <div class="quote-text">
+        <h2>GET YOUR<br>DRINK</h2>
     </div>
-  </div>
+    <div class="login-menu" id="login-menu">
+        <div class="login-box">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password">
+                </div>
+                <p class="forgot-password-link">
+                    <a href="{% url 'password_reset' %}">Forgot your password?</a>
+                </p>
+                <div class="login-actions">
+                    <button type="submit" class="login-action-btn">Log In</button>
+                    <a href="{% provider_login_url 'google' %}" class="login-action-btn login-action-btn--google">
+                        <img src="{% static 'google.png' %}" alt="Google" class="google-icon">
+                        Log in with Google
+                    </a>
+                    <a href="{% url 'signup' %}" class="login-action-btn">Join us</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

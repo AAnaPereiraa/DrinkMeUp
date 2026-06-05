@@ -27,37 +27,30 @@
                 <div class="form-group">
                     <input type="password" name="password2" placeholder="Confirm Password">
                 </div>
-                    {% if form.errors %}
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                <div class="alert alert-danger">
-                                    <strong>{{ error|escape }}</strong>
-                                </div>
-                            {% endfor %}
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
                         {% endfor %}
-                        {% for error in form.non_field_errors %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
                         <div class="alert alert-danger">
                             <strong>{{ error|escape }}</strong>
                         </div>
-                        {% endfor %}
-                    {% endif %}
-            <div class="links">
-                <div class="login-btn">
-                    <button type="submit" value="Sign up">Sign up</button>
+                    {% endfor %}
+                {% endif %}
+                <div class="login-actions">
+                    <button type="submit" class="login-action-btn">Sign up</button>
+                    <a href="{% provider_login_url 'google' %}" class="login-action-btn login-action-btn--google">
+                        <img src="{% static 'google.png' %}" alt="Google" class="google-icon">
+                        Log in with Google
+                    </a>
+                    <a href="{% url 'login' %}" class="login-action-btn">Already have an account</a>
                 </div>
-                </form>
-                <a href="{% provider_login_url 'google' %}" class="agoogle-lgn"><div class="google_btn">
-                    <img src="{% static 'google.png' %}" alt="google" class="google-icon">
-                    <button type="button" value="Log in with Google">Log in with Google</button>
-                </div></a>
-            </div>
-            <div class="loginpage-btn">
-                <a href="{% url 'login' %}" value="Log in"><button type="submit" value="Log in">Already have an account</button></a>
-            </div>
+            </form>
         </div>
     </div>
-
 </div>
-</div>
-
 {% endblock %}
