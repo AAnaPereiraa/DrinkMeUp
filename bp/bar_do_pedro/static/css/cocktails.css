@@ -105,6 +105,19 @@ h1 {
     color: whitesmoke;
 }
 
+.greetings {
+    color: whitesmoke;
+}
+
+.recommendation-message {
+    color: #f0d9a8;
+    font-size: 1rem;
+    font-weight: 600;
+    max-width: 640px;
+    margin: 12px auto 0;
+    line-height: 1.4;
+}
+
 .details{
     margin-left: 10px;
     color: whitesmoke;

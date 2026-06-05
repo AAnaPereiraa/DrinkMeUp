@@ -7,7 +7,80 @@ from .models import Drinks, DrinksMade, UserProfile
 
 BASE_DIR = Path(__file__).resolve().parent
 RESPONSE_FILE = BASE_DIR / "templates/tough_responses.txt"
+BOOZY_LEVELS = ["Light", "Medium", "Strong"]
 SUGGESTION_CACHE_TTL = 60 * 60 * 24
+NO_MATCH_MESSAGE = "Unfortunately there is no cocktail match!!! Please try again =)"
+
+
+def shift_boozy(boozy: str, direction: int) -> str | None:
+    """Move boozy one level up (+1) or down (-1)."""
+    try:
+        index = BOOZY_LEVELS.index(boozy)
+    except ValueError:
+        return None
+    new_index = index + direction
+    if 0 <= new_index < len(BOOZY_LEVELS):
+        return BOOZY_LEVELS[new_index]
+    return None
+
+
+def queryset_for_preferences(taste: str, boozy: str, spirits_list: list[str]):
+    """Return drinks matching taste, boozy, and optional spirits."""
+    queryset = Drinks.objects.filter(boozy=boozy, taste=taste)
+    if spirits_list:
+        spirits_pattern = "|".join(spirits_list)
+        queryset = queryset.filter(spirits__regex=rf"\b({spirits_pattern})\b")
+    return queryset
+
+
+def find_suggestion_pool(user_profile: UserProfile):
+    """
+    Find drinks for the user's taste and spirits, trying boozy level up then down.
+    Returns (match_list, info_message, is_exact_boozy_match).
+    """
+    taste = user_profile.taste
+    boozy = user_profile.boozy
+    spirits_list = parse_spirits_list(user_profile.spirits)
+
+    exact_qs = queryset_for_preferences(taste, boozy, spirits_list)
+    if exact_qs.exists():
+        return list(exact_qs.values()), None, True
+
+    for direction in (1, -1):
+        adjusted_boozy = shift_boozy(boozy, direction)
+        if not adjusted_boozy:
+            continue
+        fallback_qs = queryset_for_preferences(taste, adjusted_boozy, spirits_list)
+        if fallback_qs.exists():
+            message = (
+                "Unfortunately there is no match, but with this taste and spirits "
+                f"we can recommend a {adjusted_boozy} option."
+            )
+            return list(fallback_qs.values()), message, False
+
+    return [], NO_MATCH_MESSAGE, False
+
+
+def is_suggestion_in_pool(stored, match_pool: list) -> bool:
+    """Check whether a stored suggestion is still valid for the current match pool."""
+    if not stored or not match_pool:
+        return False
+    pool_ids = {drink.get("id") for drink in match_pool}
+    stored_id = stored.get("id") or stored.get("pk")
+    return stored_id in pool_ids
+
+
+def get_matching_drinks(user_profile: UserProfile):
+    """Return matching drink queryset and selected spirits list."""
+    spirits_list = parse_spirits_list(user_profile.spirits)
+    match1 = Drinks.objects.filter(boozy=user_profile.boozy, taste=user_profile.taste)
+    if spirits_list:
+        spirits_pattern = "|".join(spirits_list)
+        match2_qs = match1.filter(spirits__regex=rf"\b({spirits_pattern})\b")
+    else:
+        match2_qs = match1
+
+    return match1, match2_qs, spirits_list
 
 
 def get_file_content_as_list(path_file) -> list:
@@ -36,44 +109,6 @@ def parse_spirits_list(spirits: str) -> list[str]:
     return [spirit.strip() for spirit in spirits.split(",") if spirit.strip()]
 
 
-def get_matching_drinks(user_profile: UserProfile):
-    """Return matching drink queryset and selected spirits list."""
-    spirits_list = parse_spirits_list(user_profile.spirits)
-    spirits_pattern = "|".join(spirits_list)
-
-    match1 = Drinks.objects.filter(boozy=user_profile.boozy, taste=user_profile.taste)
-    if spirits_list:
-        match2_qs = match1.filter(spirits__regex=rf"\b({spirits_pattern})\b")
-    else:
-        match2_qs = match1
-
-    return match1, match2_qs, spirits_list
-
-
-def is_valid_stored_suggestion(stored, match1, spirits_list) -> bool:
-    """Validate a cached suggestion against current user preferences."""
-    drink_id = stored.get("id") or stored.get("pk")
-    if drink_id:
-        valid = match1.filter(pk=drink_id).exists()
-        if spirits_list and valid:
-            spirits_pattern = "|".join(spirits_list)
-            valid = match1.filter(
-                pk=drink_id,
-                spirits__regex=rf"\b({spirits_pattern})\b",
-            ).exists()
-        return valid
-
-    cocktail_name = stored.get("cocktail")
-    if not cocktail_name:
-        return False
-
-    valid_qs = match1.filter(cocktail=cocktail_name)
-    if spirits_list:
-        spirits_pattern = "|".join(spirits_list)
-        valid_qs = valid_qs.filter(spirits__regex=rf"\b({spirits_pattern})\b")
-    return valid_qs.exists()
-
-
 def get_suggestion_cache_key(user_id: int) -> str:
     return f"cocktail_suggestion:{user_id}"
 
@@ -92,36 +127,34 @@ def clear_stored_suggestion(user_id: int) -> None:
 
 def get_cocktail_suggestion(user_profile: UserProfile, user_id: int):
     """Pick or reuse a cocktail suggestion for the user."""
-    match1, match2_qs, spirits_list = get_matching_drinks(user_profile)
-    match2 = list(match2_qs.values())
+    match_pool, info_message, _ = find_suggestion_pool(user_profile)
 
-    if not match2:
-        return None, "Unfortunately there is no cocktail match!!! Please try again =)"
+    if not match_pool:
+        return None, info_message
 
     stored = get_stored_suggestion(user_id)
     cocktail_suggestion = None
 
-    if stored and is_valid_stored_suggestion(stored, match1, spirits_list):
+    if stored and is_suggestion_in_pool(stored, match_pool):
         cocktail_suggestion = stored
 
     if not cocktail_suggestion:
-        cocktail_suggestion = random.choice(match2)
+        cocktail_suggestion = random.choice(match_pool)
         set_stored_suggestion(user_id, cocktail_suggestion)
 
-    return cocktail_suggestion, None
+    return cocktail_suggestion, info_message
 
 
 def shuffle_cocktail_suggestion(user_profile: UserProfile, user_id: int):
     """Return a new random cocktail suggestion."""
-    _, match2_qs, _ = get_matching_drinks(user_profile)
-    match2 = list(match2_qs.values())
+    match_pool, info_message, _ = find_suggestion_pool(user_profile)
 
-    if not match2:
-        return None, "Unfortunately there is no cocktail match!!! Please try again =)"
+    if not match_pool:
+        return None, info_message
 
-    cocktail_suggestion = random.choice(match2)
+    cocktail_suggestion = random.choice(match_pool)
     set_stored_suggestion(user_id, cocktail_suggestion)
-    return cocktail_suggestion, None
+    return cocktail_suggestion, info_message
 
 
 def record_drink_made(user, rate: str, comment: str) -> DrinksMade:

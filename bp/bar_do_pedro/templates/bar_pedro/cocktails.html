@@ -15,6 +15,9 @@
     <div class="greetings text-center mb-4">
         <h1>Voilá</h1>
         <h3 class="text-capitalize">{{ user.username }}</h3>
+        {% if recommendation_message %}
+        <p class="recommendation-message">{{ recommendation_message }}</p>
+        {% endif %}
     </div>
 
     <div class="card cocktail-card mb-4">

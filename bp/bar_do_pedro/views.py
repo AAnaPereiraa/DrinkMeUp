@@ -10,23 +10,16 @@ from django.urls import reverse_lazy
 from pathlib import Path
 from .forms import BarUserForm
 from .models import UserProfile, Drinks, DrinksMade
-from pathlib import Path
+from .services import (
+    find_suggestion_pool,
+    get_file_content_as_list,
+    is_suggestion_in_pool,
+    RESPONSE_FILE,
+)
 
 
 
 # Create utilities here
-def get_file_content_as_list(path_file: str) -> list:
-    """Returns content of a file as a list of strings one string per line"""
-    try:
-        with open(path_file) as f:
-            content = f.readlines()
-    except FileNotFoundError as err:
-        print(err)
-    return content    
-
-
-BASE_DIR = Path(__file__).resolve().parent 
-RESPONSE_FILE = BASE_DIR / "templates/tough_responses.txt"
 
 
 ## Password Reset
@@ -162,95 +155,57 @@ def cocktails(request):
     """This function is to run the drinks list match the user preferences and randomly suggest a cocktail"""
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
-    latest_post =  user_profile.latest_post
-    boozy = user_profile.boozy
-    taste = user_profile.taste
-    spirits = user_profile.spirits
-    spirits_list = [spirit.strip() for spirit in spirits.split(',') if spirit.strip()]
-    spirits_pattern = "|".join(spirits_list)
+    latest_post = user_profile.latest_post
 
-    # match the drinks based on preferences
-    match1 = Drinks.objects.filter(boozy=boozy, taste=taste)
-    if spirits_list:
-        match2_qs = match1.filter(spirits__regex=rf'\b({spirits_pattern})\b')
-    else:
-        match2_qs = match1
+    match_pool, recommendation_message, _ = find_suggestion_pool(user_profile)
 
-    match2 = list(match2_qs.values())
-
-    try:
-        cocktail_suggestion = None
-
-        # If a suggestion is already stored in session, validate it against current prefs
-        if 'selected_cocktail' in request.session:
-            stored = request.session['selected_cocktail']
-            # Try to validate by id first
-            sc_id = stored.get('id') or stored.get('pk')
-            if sc_id:
-                valid = match1.filter(pk=sc_id).exists()
-                if spirits_list and valid:
-                    valid = match1.filter(pk=sc_id, spirits__regex=rf'\b({spirits_pattern})\b').exists()
-                if valid:
-                    cocktail_suggestion = stored
-            else:
-                # Fallback: validate by cocktail name
-                name = stored.get('cocktail')
-                if name:
-                    valid_qs = match1.filter(cocktail=name)
-                    if spirits_list:
-                        valid_qs = valid_qs.filter(spirits__regex=rf'\b({spirits_pattern})\b')
-                    if valid_qs.exists():
-                        cocktail_suggestion = stored
-
-        # If no valid stored suggestion, pick a new one from match2
-        if not cocktail_suggestion:
-            if not match2:
-                raise IndexError
-            cocktail_suggestion = random.choice(match2)
-            request.session['selected_cocktail'] = cocktail_suggestion
-
-        context = {
-            'member': user_profile,
-            'motivational_msg': latest_post,
-            'cocktails': cocktail_suggestion,
-        }
-        # Clear any previous 'no match' message now that we have a valid suggestion
-        request.session.pop('message', None)
-
-    except IndexError:
-        request.session['message'] = "Unfortunately there is no cocktail match!!! Please try again =)"
+    if not match_pool:
+        request.session['message'] = recommendation_message
         return redirect("profile")
-    
+
+    cocktail_suggestion = None
+    if 'selected_cocktail' in request.session:
+        stored = request.session['selected_cocktail']
+        if is_suggestion_in_pool(stored, match_pool):
+            cocktail_suggestion = stored
+
+    if not cocktail_suggestion:
+        cocktail_suggestion = random.choice(match_pool)
+        request.session['selected_cocktail'] = cocktail_suggestion
+
+    context = {
+        'member': user_profile,
+        'motivational_msg': latest_post,
+        'cocktails': cocktail_suggestion,
+        'recommendation_message': recommendation_message,
+    }
+    request.session.pop('message', None)
+
     if request.method == 'POST':
         action = request.POST.get('action')
-        
-        #if the user is not satisfied with the suggestion, click and new random cocktail will be shown
+
         if action == "DMU":
-        
-            cocktail_suggestion = random.choice(list(match2))
+            cocktail_suggestion = random.choice(match_pool)
             request.session['selected_cocktail'] = cocktail_suggestion
             context['cocktails'] = cocktail_suggestion
-            
+
         if action == "YES":
             username = user.username
-            # Retrieve the cocktail from the session to ensure consistency
             cocktail = request.session.get('selected_cocktail').get("cocktail")
             drink = Drinks.objects.get(cocktail=cocktail)
             rate = request.POST.get('rate')
             comment = request.POST.get('comment')
-        
+
             DrinksMade.objects.create(user=username, cocktail=cocktail, rate=rate, comment=comment, drink=drink)
-            
-            # Update latest post with a random message and reset spirit picks for next order
+
             user_profile.latest_post = random.choice(get_file_content_as_list(RESPONSE_FILE))
             user_profile.spirits = ""
             user_profile.save()
-            
-            # Clear the selected cocktail from the session after saving
+
             del request.session['selected_cocktail']
 
-            return redirect("profile")       
-        
+            return redirect("profile")
+
         return render(request, 'bar_pedro/cocktails.html', context)
 
     return render(request, 'bar_pedro/cocktails.html', context)

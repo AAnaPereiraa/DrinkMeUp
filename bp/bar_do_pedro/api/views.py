@@ -113,12 +113,15 @@ class CocktailSuggestionView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        suggestion, error_message = get_cocktail_suggestion(user_profile, request.user.id)
-        if error_message:
-            return Response({"detail": error_message}, status=status.HTTP_404_NOT_FOUND)
+        suggestion, info_message = get_cocktail_suggestion(user_profile, request.user.id)
+        if not suggestion:
+            return Response({"detail": info_message}, status=status.HTTP_404_NOT_FOUND)
 
         drink = Drinks.objects.get(pk=suggestion["id"])
-        return Response(DrinkSerializer(drink, context={"request": request}).data)
+        response_data = DrinkSerializer(drink, context={"request": request}).data
+        if info_message:
+            response_data["recommendation_message"] = info_message
+        return Response(response_data)
 
 
 class CocktailShuffleView(APIView):
@@ -126,12 +129,15 @@ class CocktailShuffleView(APIView):
 
     def post(self, request):
         user_profile = UserProfile.objects.get(user=request.user)
-        suggestion, error_message = shuffle_cocktail_suggestion(user_profile, request.user.id)
-        if error_message:
-            return Response({"detail": error_message}, status=status.HTTP_404_NOT_FOUND)
+        suggestion, info_message = shuffle_cocktail_suggestion(user_profile, request.user.id)
+        if not suggestion:
+            return Response({"detail": info_message}, status=status.HTTP_404_NOT_FOUND)
 
         drink = Drinks.objects.get(pk=suggestion["id"])
-        return Response(DrinkSerializer(drink, context={"request": request}).data)
+        response_data = DrinkSerializer(drink, context={"request": request}).data
+        if info_message:
+            response_data["recommendation_message"] = info_message
+        return Response(response_data)
 
 
 class CocktailMadeView(APIView):
