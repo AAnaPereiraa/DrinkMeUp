@@ -133,21 +133,58 @@ def profile_view(request):
         'drinks': user_drinks,
         'spirits_columns': spirits_columns,
         'selected_spirits': selected_spirits,
+        'show_fallback_prompt': request.session.get('show_fallback_prompt', False),
+        'fallback_message': request.session.get('fallback_message', ''),
+        'error_message': request.session.pop('message', None),
     }
-    
+
     if request.method == 'POST':
+        action = request.POST.get('action', 'order')
+
+        if action == 'accept_fallback':
+            match_pool = request.session.pop('fallback_match_pool', None)
+            recommendation_message = request.session.pop('fallback_message', None)
+            request.session.pop('show_fallback_prompt', None)
+            if match_pool:
+                request.session['selected_cocktail'] = random.choice(match_pool)
+                if recommendation_message:
+                    request.session['recommendation_message'] = recommendation_message
+                return redirect('cocktails')
+            return redirect('profile')
+
+        if action == 'dismiss_fallback':
+            request.session.pop('fallback_match_pool', None)
+            request.session.pop('fallback_message', None)
+            request.session.pop('show_fallback_prompt', None)
+            return redirect('profile')
+
         user_profile.boozy = request.POST.get('strength')
         user_profile.taste = request.POST.get('taste')
-         # Get the list of selected spirits and join them into a single string
         selected_spirits = request.POST.getlist('spirit')
-        user_profile.spirits = ', '.join(selected_spirits)  # This saves the spirits as a comma-separated string
-        
-        # Save the data correctly
+        user_profile.spirits = ', '.join(selected_spirits)
+
         user_profile.save()
-        # Clear any previously stored cocktail suggestion so new preferences get a fresh match
         request.session.pop('selected_cocktail', None)
-        return redirect('cocktails')
-   
+        request.session.pop('recommendation_message', None)
+        request.session.pop('fallback_match_pool', None)
+        request.session.pop('fallback_message', None)
+        request.session.pop('show_fallback_prompt', None)
+
+        match_pool, recommendation_message, is_exact_match = find_suggestion_pool(user_profile)
+
+        if not match_pool:
+            request.session['message'] = recommendation_message
+            return redirect('profile')
+
+        if is_exact_match:
+            request.session['selected_cocktail'] = random.choice(match_pool)
+            return redirect('cocktails')
+
+        request.session['fallback_match_pool'] = match_pool
+        request.session['fallback_message'] = recommendation_message
+        request.session['show_fallback_prompt'] = True
+        return redirect('profile')
+
     return render(request, 'bar_pedro/profile.html', context)
 
 @login_required
@@ -157,11 +194,13 @@ def cocktails(request):
     user_profile = UserProfile.objects.get(user=user)
     latest_post = user_profile.latest_post
 
-    match_pool, recommendation_message, _ = find_suggestion_pool(user_profile)
+    match_pool, computed_message, _ = find_suggestion_pool(user_profile)
 
     if not match_pool:
-        request.session['message'] = recommendation_message
+        request.session['message'] = computed_message
         return redirect("profile")
+
+    recommendation_message = request.session.pop('recommendation_message', None) or computed_message
 
     cocktail_suggestion = None
     if 'selected_cocktail' in request.session:
@@ -177,7 +216,7 @@ def cocktails(request):
         'member': user_profile,
         'motivational_msg': latest_post,
         'cocktails': cocktail_suggestion,
-        'recommendation_message': recommendation_message,
+        'recommendation_message': recommendation_message if recommendation_message else None,
     }
     request.session.pop('message', None)
 

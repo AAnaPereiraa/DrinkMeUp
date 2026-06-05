@@ -36,8 +36,8 @@
             <h2>Order Here</h2>
             <div class="order" >
                 <div class="error-message" >
-                    {% if request.session.message %}
-                        {{ request.session.message }}
+                    {% if error_message %}
+                        {{ error_message }}
                     {% endif %}
                 </div>
                 <div class="tasteform">
@@ -81,12 +81,32 @@
                             </select>
                         </fieldset>
                         <br><br>                   
-                        <button class="dmu_button"  type="submit">Drink me up</button>
+                        <button class="dmu_button" type="submit" name="action" value="order">Drink me up</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+{% if show_fallback_prompt %}
+<div id="fallbackModal" class="fallback-modal">
+    <div class="fallback-modal-content">
+        <p class="fallback-modal-message">{{ fallback_message }}</p>
+        <div class="fallback-modal-actions">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="accept_fallback">
+                <button type="submit" class="fallback-btn fallback-btn-ok">OK</button>
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="dismiss_fallback">
+                <button type="submit" class="fallback-btn fallback-btn-retry">Try again</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}

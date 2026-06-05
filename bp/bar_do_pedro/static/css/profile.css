@@ -289,6 +289,77 @@ button {
     margin: auto;
 }
 
+.fallback-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 2000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.fallback-modal-content {
+    background: rgba(20, 20, 20, 0.98);
+    color: whitesmoke;
+    border-radius: 12px;
+    padding: 24px;
+    width: min(480px, 96vw);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+.fallback-modal-message {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #f0d9a8;
+}
+
+.fallback-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.fallback-modal-actions form {
+    margin: 0;
+}
+
+.fallback-btn {
+    min-width: 120px;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fallback-btn-ok {
+    background-color: #d19b4e;
+    color: whitesmoke;
+}
+
+.fallback-btn-ok:hover {
+    background-color: limegreen;
+    color: #292929;
+}
+
+.fallback-btn-retry {
+    background-color: transparent;
+    color: whitesmoke;
+    border: 2px solid #d19b4e;
+}
+
+.fallback-btn-retry:hover {
+    background-color: rgba(209, 155, 78, 0.2);
+}
+
 
 
 
