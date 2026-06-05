@@ -1,7 +1,6 @@
 {% extends 'bar_pedro/base.html' %}
 {% load static %}
-{% block head %}
-{{ block.super }}
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/cocktails_list.css' %}">
 {% endblock %}
 {% block title %}Cocktails List{% endblock %}
