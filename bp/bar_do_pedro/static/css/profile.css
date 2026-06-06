@@ -18,7 +18,9 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
 }
 
 h2 {
@@ -63,7 +65,7 @@ h2 {
     flex-direction: column;
     flex-wrap: nowrap;
     flex: 1 1 auto;
-    min-width: 320px;
+    min-width: 0;
     max-width: calc(100% - 340px);
     margin-right: 20px;
     height: auto;
@@ -129,8 +131,8 @@ h2 {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    flex: 0 0 320px; /* fixed width to ensure left column uses remaining space */
-    min-width: 260px;
+    flex: 0 0 320px;
+    min-width: 0;
     height: auto;
     align-items: center;
     text-align: center;
@@ -215,58 +217,42 @@ h3 {
     color: whitesmoke;
 }
 
-/* Responsive: allow wrapping on smaller screens */
-@media (max-width: 900px) {
-    .row { flex-wrap: wrap; }
-    .leftcolumn { max-width: 100%; flex-basis: 100%; }
-    .rightcolumn { flex-basis: 100%; flex: 1 1 100%; }
-}
+/* Desktop: two-column profile layout */
+@media (min-width: 769px) {
+    .content .row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        column-gap: 12px !important;
+        align-items: start !important;
+        justify-content: flex-start !important;
+        gap: 12px !important;
+        padding: 0 8px !important;
+        max-width: none !important;
+        width: 100% !important;
+    }
 
-/* Stronger rules scoped to profile content to override global styles */
-.content .row {
-    justify-content: flex-start !important;
-    gap: 12px !important;
-    padding: 0 8px !important; /* small horizontal padding */
-    max-width: none !important;
-    width: 100% !important;
-}
+    .content .leftcolumn {
+        margin-left: 0 !important;
+        margin-right: 12px !important;
+        max-width: none !important;
+        padding-right: 8px !important;
+    }
 
-.content .leftcolumn {
-    margin-left: 0 !important;
-    margin-right: 12px !important;
-    max-width: 600px !important;
-}
+    .content .rightcolumn {
+        flex: none !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding-left: 12px !important;
+    }
 
-.content .rightcolumn {
-    flex: none !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    padding-left: 12px !important;
-}
-
-/* Force a strict two-column layout to avoid overlap */
-.content .row {
-    display: grid !important;
-    /* Two equal columns */
-    grid-template-columns: 1fr 1fr !important;
-    column-gap: 12px !important;
-    align-items: start !important;
-}
-
-.content .leftcolumn {
-    max-width: none !important;
-    padding-right: 8px !important;
-}
-
-.content .details {
-    width: 100% !important;
+    .content .details {
+        width: 100% !important;
+    }
 }
 
 @media (max-width: 768px) {
     body {
         background-attachment: scroll;
-        min-height: 100vh;
-        height: auto;
     }
 
     .greetings {
@@ -292,33 +278,56 @@ h3 {
     }
 
     .content {
-        padding: 0 12px 24px;
+        padding: 0 12px 32px;
+        width: 100%;
+        overflow: visible;
     }
 
     .content .row {
         display: flex !important;
         flex-direction: column !important;
-        grid-template-columns: 1fr !important;
+        flex-wrap: nowrap !important;
         width: 100% !important;
-        gap: 24px !important;
+        max-width: 100% !important;
+        gap: 28px !important;
         padding: 0 !important;
+        margin-top: 16px !important;
     }
 
     .content .leftcolumn,
-    .content .rightcolumn {
+    .content .rightcolumn,
+    .leftcolumn,
+    .rightcolumn {
+        display: flex !important;
+        flex: none !important;
         max-width: 100% !important;
         width: 100% !important;
         min-width: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 
-    .rightcolumn {
-        align-items: stretch;
+    /* Show Order Here first on phone */
+    .content .rightcolumn {
+        order: 1;
+        align-items: stretch !important;
+        text-align: left !important;
+    }
+
+    .content .leftcolumn {
+        order: 2;
+    }
+
+    .content .rightcolumn h2,
+    .content .leftcolumn h2 {
+        text-align: center;
+        margin-bottom: 8px;
     }
 
     .order {
-        margin-top: 20px;
+        margin-top: 12px;
         width: 100%;
     }
 
@@ -328,7 +337,18 @@ h3 {
         align-items: stretch;
     }
 
+    fieldset {
+        width: 100%;
+    }
+
+    .taste,
+    .boozy {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
     select {
+        width: 100%;
         max-width: 100%;
         min-height: 44px;
     }
@@ -336,6 +356,7 @@ h3 {
     .spirits-columns {
         flex-wrap: wrap;
         gap: 12px;
+        width: 100%;
     }
 
     .spirits-column {
@@ -344,7 +365,7 @@ h3 {
     }
 
     .cocktail-row {
-        grid-template-columns: 1fr 56px minmax(80px, 1fr);
+        grid-template-columns: 1fr 56px minmax(70px, 1fr);
         font-size: 0.85rem;
     }
 
