@@ -8,6 +8,11 @@ from .models import Drinks, DrinksMade, UserProfile
 BASE_DIR = Path(__file__).resolve().parent
 RESPONSE_FILE = BASE_DIR / "templates/tough_responses.txt"
 BOOZY_LEVELS = ["Light", "Medium", "Strong"]
+BOOZY_LABELS = {
+    "Light": "starting slow",
+    "Medium": "it's getting hot in here",
+    "Strong": "to infinity and beyond",
+}
 SUGGESTION_CACHE_TTL = 60 * 60 * 24
 NO_MATCH_MESSAGE = "Unfortunately there is no cocktail match!!! Please try again =)"
 
@@ -84,9 +89,10 @@ def find_suggestion_pool(preferences):
             continue
         fallback_qs = queryset_for_preferences(taste, adjusted_boozy, spirits_list)
         if fallback_qs.exists():
+            boozy_label = BOOZY_LABELS.get(adjusted_boozy, adjusted_boozy)
             message = (
                 "Unfortunately there is no match, but with this taste and spirits "
-                f"we can recommend a {adjusted_boozy} option."
+                f"we can recommend a {boozy_label} boozy level option."
             )
             return list(fallback_qs.values()), message, False
 
