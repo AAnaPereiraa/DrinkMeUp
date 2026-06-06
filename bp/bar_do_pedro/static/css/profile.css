@@ -475,7 +475,10 @@ button {
 }
 
 .guest-content .guest-row {
-    justify-content: center;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .guest-content .guest-order-column {
@@ -483,6 +486,62 @@ button {
     max-width: 600px;
     width: 100%;
     margin: 0 auto;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px !important;
+}
+
+.guest-content .guest-order-column h2 {
+    width: 100%;
+    text-align: center;
+}
+
+.guest-content .order {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.guest-content .tasteform,
+.guest-content form {
+    align-items: center;
+    width: 100%;
+    max-width: 560px;
+}
+
+.guest-content .taste,
+.guest-content .boozy {
+    justify-content: center;
+    width: 100%;
+}
+
+.guest-content .spirits-columns {
+    justify-content: center;
+}
+
+.guest-content .dmu_button {
+    align-self: center;
+}
+
+@media (min-width: 769px) {
+    .guest-content .guest-row {
+        grid-template-columns: unset !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .guest-content .guest-order-column {
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .guest-content .tasteform,
+    .guest-content form {
+        align-items: center;
+    }
 }
 
 
