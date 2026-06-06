@@ -22,7 +22,7 @@
                 <a href="{% url 'delete' %}" class="nav-item">Delete profile</a>
             </div> 
         </div>
-        {% elif request.session.guest_mode %}
+        {% elif request.session.guest_mode and request.resolver_match.url_name != 'welcome' and request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' %}
         <div class="nav-menu" id="nav-menu">
             <div id="profile-btn">
                 <a href="{% url 'menu' %}" class="nav-item">Menu</a>
@@ -38,6 +38,9 @@
             </div>
             <div id="joinus-btn">
                 <a href="{% url 'signup' %}" class="nav-item">Join us</a>
+            </div>
+            <div id="guest-btn">
+                <a href="{% url 'guest' %}" class="nav-item">Guest</a>
             </div>
         </div>
         {% endif %}
