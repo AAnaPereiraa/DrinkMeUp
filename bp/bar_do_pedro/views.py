@@ -33,14 +33,6 @@ def _order_form_is_valid(request) -> bool:
     )
 
 
-def _order_form_context_from_post(request) -> dict:
-    return {
-        "selected_spirits": request.POST.getlist("spirit"),
-        "selected_taste": request.POST.get("taste", ""),
-        "selected_boozy": request.POST.get("strength", ""),
-    }
-
-
 def _handle_bar_form_post(request, preferences, bar_url_name, cocktails_url_name):
     """Process order / fallback actions from the bar page. Returns (redirect, validation_error)."""
     action = request.POST.get("action", "order")
@@ -267,7 +259,6 @@ def profile_view(request):
         if redirect_response:
             return redirect_response
         if validation_error:
-            context.update(_order_form_context_from_post(request))
             context["validation_error"] = validation_error
 
     return render(request, 'bar_pedro/profile.html', context)
@@ -306,7 +297,6 @@ def guest_view(request):
         if redirect_response:
             return redirect_response
         if validation_error:
-            context.update(_order_form_context_from_post(request))
             context["validation_error"] = validation_error
 
     return render(request, "bar_pedro/guest.html", context)

@@ -158,6 +158,9 @@ h2 {
     margin: 12px 0 4px;
     width: 100%;
     font-size: 0.95rem;
+    overflow: hidden;
+    animation: fade 1.5s ease forwards;
+    animation-delay: 5s;
 }
 
 @keyframes fade {
