@@ -13,11 +13,123 @@ from .models import UserProfile, Drinks, DrinksMade
 from .services import (
     find_suggestion_pool,
     get_file_content_as_list,
+    get_spirits_columns,
+    GuestPreferences,
     is_suggestion_in_pool,
     resolve_drink,
     drink_to_session_data,
     RESPONSE_FILE,
 )
+
+
+def _handle_bar_form_post(request, preferences, bar_url_name, cocktails_url_name):
+    """Process order / fallback actions from the bar page. Returns redirect or None."""
+    action = request.POST.get("action", "order")
+
+    if action == "accept_fallback":
+        match_pool = request.session.pop("fallback_match_pool", None)
+        request.session.pop("fallback_message", None)
+        request.session.pop("show_fallback_prompt", None)
+        if match_pool:
+            request.session["selected_cocktail"] = drink_to_session_data(random.choice(match_pool))
+            return redirect(cocktails_url_name)
+        return redirect(bar_url_name)
+
+    if action == "dismiss_fallback":
+        request.session.pop("fallback_match_pool", None)
+        request.session.pop("fallback_message", None)
+        request.session.pop("show_fallback_prompt", None)
+        return redirect(bar_url_name)
+
+    if isinstance(preferences, GuestPreferences):
+        preferences.save_from_post(request)
+    else:
+        preferences.boozy = request.POST.get("strength")
+        preferences.taste = request.POST.get("taste")
+        preferences.spirits = ", ".join(request.POST.getlist("spirit"))
+        preferences.save()
+
+    request.session.pop("selected_cocktail", None)
+    request.session.pop("fallback_match_pool", None)
+    request.session.pop("fallback_message", None)
+    request.session.pop("show_fallback_prompt", None)
+
+    match_pool, recommendation_message, is_exact_match = find_suggestion_pool(preferences)
+
+    if not match_pool:
+        request.session["message"] = recommendation_message
+        return redirect(bar_url_name)
+
+    if is_exact_match:
+        request.session["selected_cocktail"] = drink_to_session_data(random.choice(match_pool))
+        return redirect(cocktails_url_name)
+
+    request.session["fallback_match_pool"] = match_pool
+    request.session["fallback_message"] = recommendation_message
+    request.session["show_fallback_prompt"] = True
+    return redirect(bar_url_name)
+
+
+def _render_cocktail_suggestion(request, preferences, template_name, bar_url_name, is_guest=False):
+    """Shared logic for authenticated and guest cocktail suggestion pages."""
+    match_pool, computed_message, _ = find_suggestion_pool(preferences)
+
+    if not match_pool:
+        request.session["message"] = computed_message
+        return redirect(bar_url_name)
+
+    cocktail_suggestion = None
+    if "selected_cocktail" in request.session:
+        stored = request.session["selected_cocktail"]
+        if is_suggestion_in_pool(stored, match_pool):
+            cocktail_suggestion = stored
+
+    if not cocktail_suggestion:
+        cocktail_suggestion = drink_to_session_data(random.choice(match_pool))
+        request.session["selected_cocktail"] = cocktail_suggestion
+
+    cocktail_drink = resolve_drink(cocktail_suggestion)
+
+    context = {
+        "cocktails": cocktail_drink,
+        "is_guest": is_guest,
+    }
+    if not is_guest:
+        context["member"] = preferences
+        context["motivational_msg"] = preferences.latest_post
+
+    request.session.pop("message", None)
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "DMU":
+            cocktail_suggestion = drink_to_session_data(random.choice(match_pool))
+            request.session["selected_cocktail"] = cocktail_suggestion
+            context["cocktails"] = resolve_drink(cocktail_suggestion)
+
+        if action == "YES" and not is_guest:
+            username = request.user.username
+            cocktail = request.session.get("selected_cocktail").get("cocktail")
+            drink = Drinks.objects.get(cocktail=cocktail)
+            rate = request.POST.get("rate")
+            comment = request.POST.get("comment")
+
+            DrinksMade.objects.create(
+                user=username, cocktail=cocktail, rate=rate, comment=comment, drink=drink
+            )
+
+            preferences.latest_post = random.choice(get_file_content_as_list(RESPONSE_FILE))
+            preferences.spirits = ""
+            preferences.save()
+
+            del request.session["selected_cocktail"]
+
+            return redirect("profile")
+
+        return render(request, template_name, context)
+
+    return render(request, template_name, context)
 
 
 
@@ -112,22 +224,8 @@ def profile_view(request):
     user_profile = UserProfile.objects.get(user=user)
     latest_post =  user_profile.latest_post
     user_drinks = DrinksMade.objects.filter(user=user.username).order_by('-id')[:10]
-
-    # Build a dynamic list of all spirits present in the Drinks table
-    all_spirits = set()
-    for s in Drinks.objects.values_list('spirits', flat=True):
-        if s:
-            for part in s.split(','):
-                sp = part.strip()
-                if sp:
-                    all_spirits.add(sp)
-    available_spirits = sorted(all_spirits)
-
-    # Always show unchecked spirit boxes on the bar page.
     selected_spirits = []
-
-    # Split the available spirits into columns of at most 10 items each
-    spirits_columns = [available_spirits[i:i + 10] for i in range(0, len(available_spirits), 10)]
+    spirits_columns = get_spirits_columns()
 
     context = {
         'member': user_profile,
@@ -141,48 +239,9 @@ def profile_view(request):
     }
 
     if request.method == 'POST':
-        action = request.POST.get('action', 'order')
-
-        if action == 'accept_fallback':
-            match_pool = request.session.pop('fallback_match_pool', None)
-            request.session.pop('fallback_message', None)
-            request.session.pop('show_fallback_prompt', None)
-            if match_pool:
-                request.session['selected_cocktail'] = drink_to_session_data(random.choice(match_pool))
-                return redirect('cocktails')
-            return redirect('profile')
-
-        if action == 'dismiss_fallback':
-            request.session.pop('fallback_match_pool', None)
-            request.session.pop('fallback_message', None)
-            request.session.pop('show_fallback_prompt', None)
-            return redirect('profile')
-
-        user_profile.boozy = request.POST.get('strength')
-        user_profile.taste = request.POST.get('taste')
-        selected_spirits = request.POST.getlist('spirit')
-        user_profile.spirits = ', '.join(selected_spirits)
-
-        user_profile.save()
-        request.session.pop('selected_cocktail', None)
-        request.session.pop('fallback_match_pool', None)
-        request.session.pop('fallback_message', None)
-        request.session.pop('show_fallback_prompt', None)
-
-        match_pool, recommendation_message, is_exact_match = find_suggestion_pool(user_profile)
-
-        if not match_pool:
-            request.session['message'] = recommendation_message
-            return redirect('profile')
-
-        if is_exact_match:
-            request.session['selected_cocktail'] = drink_to_session_data(random.choice(match_pool))
-            return redirect('cocktails')
-
-        request.session['fallback_match_pool'] = match_pool
-        request.session['fallback_message'] = recommendation_message
-        request.session['show_fallback_prompt'] = True
-        return redirect('profile')
+        redirect_response = _handle_bar_form_post(request, user_profile, "profile", "cocktails")
+        if redirect_response:
+            return redirect_response
 
     return render(request, 'bar_pedro/profile.html', context)
 
@@ -191,61 +250,45 @@ def cocktails(request):
     """This function is to run the drinks list match the user preferences and randomly suggest a cocktail"""
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
-    latest_post = user_profile.latest_post
+    return _render_cocktail_suggestion(
+        request, user_profile, "bar_pedro/cocktails.html", "profile", is_guest=False
+    )
 
-    match_pool, computed_message, _ = find_suggestion_pool(user_profile)
 
-    if not match_pool:
-        request.session['message'] = computed_message
+def guest_view(request):
+    """Bar page for guests — order drinks without an account (no My Cocktails)."""
+    if request.user.is_authenticated:
         return redirect("profile")
 
-    cocktail_suggestion = None
-    if 'selected_cocktail' in request.session:
-        stored = request.session['selected_cocktail']
-        if is_suggestion_in_pool(stored, match_pool):
-            cocktail_suggestion = stored
-
-    if not cocktail_suggestion:
-        cocktail_suggestion = drink_to_session_data(random.choice(match_pool))
-        request.session['selected_cocktail'] = cocktail_suggestion
-
-    cocktail_drink = resolve_drink(cocktail_suggestion)
+    request.session["guest_mode"] = True
+    preferences = GuestPreferences.from_session(request)
+    selected_spirits = []
 
     context = {
-        'member': user_profile,
-        'motivational_msg': latest_post,
-        'cocktails': cocktail_drink,
+        "spirits_columns": get_spirits_columns(),
+        "selected_spirits": selected_spirits,
+        "show_fallback_prompt": request.session.get("show_fallback_prompt", False),
+        "fallback_message": request.session.get("fallback_message", ""),
+        "error_message": request.session.pop("message", None),
     }
-    request.session.pop('message', None)
 
-    if request.method == 'POST':
-        action = request.POST.get('action')
+    if request.method == "POST":
+        redirect_response = _handle_bar_form_post(request, preferences, "guest", "guest_cocktails")
+        if redirect_response:
+            return redirect_response
 
-        if action == "DMU":
-            cocktail_suggestion = drink_to_session_data(random.choice(match_pool))
-            request.session['selected_cocktail'] = cocktail_suggestion
-            context['cocktails'] = resolve_drink(cocktail_suggestion)
+    return render(request, "bar_pedro/guest.html", context)
 
-        if action == "YES":
-            username = user.username
-            cocktail = request.session.get('selected_cocktail').get("cocktail")
-            drink = Drinks.objects.get(cocktail=cocktail)
-            rate = request.POST.get('rate')
-            comment = request.POST.get('comment')
 
-            DrinksMade.objects.create(user=username, cocktail=cocktail, rate=rate, comment=comment, drink=drink)
+def guest_cocktails(request):
+    """Cocktail suggestion page for guests."""
+    if request.user.is_authenticated:
+        return redirect("cocktails")
 
-            user_profile.latest_post = random.choice(get_file_content_as_list(RESPONSE_FILE))
-            user_profile.spirits = ""
-            user_profile.save()
-
-            del request.session['selected_cocktail']
-
-            return redirect("profile")
-
-        return render(request, 'bar_pedro/cocktails.html', context)
-
-    return render(request, 'bar_pedro/cocktails.html', context)
+    preferences = GuestPreferences.from_session(request)
+    return _render_cocktail_suggestion(
+        request, preferences, "bar_pedro/cocktails.html", "guest", is_guest=True
+    )
 
 @login_required
 def menu(request):

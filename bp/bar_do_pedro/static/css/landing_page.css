@@ -122,3 +122,13 @@ body {
     background: rgba(209, 155, 78, 0.25);
     color: whitesmoke;
 }
+
+.guest-btn {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.guest-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: whitesmoke;
+}

@@ -33,14 +33,46 @@ def queryset_for_preferences(taste: str, boozy: str, spirits_list: list[str]):
     return queryset
 
 
-def find_suggestion_pool(user_profile: UserProfile):
+def get_spirits_columns() -> list[list[str]]:
+    """Split available spirits into columns of at most 10 for the profile form."""
+    spirits = get_available_spirits()
+    return [spirits[i : i + 10] for i in range(0, len(spirits), 10)]
+
+
+class GuestPreferences:
+    """Session-backed preferences for guest users (no account)."""
+
+    def __init__(self, taste: str = "", boozy: str = "", spirits: str = ""):
+        self.taste = taste
+        self.boozy = boozy
+        self.spirits = spirits
+
+    @classmethod
+    def from_session(cls, request):
+        return cls(
+            taste=request.session.get("guest_taste", ""),
+            boozy=request.session.get("guest_boozy", ""),
+            spirits=request.session.get("guest_spirits", ""),
+        )
+
+    def save_from_post(self, request):
+        self.taste = request.POST.get("taste", "")
+        self.boozy = request.POST.get("strength", "")
+        self.spirits = ", ".join(request.POST.getlist("spirit"))
+        request.session["guest_taste"] = self.taste
+        request.session["guest_boozy"] = self.boozy
+        request.session["guest_spirits"] = self.spirits
+        request.session["guest_mode"] = True
+
+
+def find_suggestion_pool(preferences):
     """
     Find drinks for the user's taste and spirits, trying boozy level up then down.
     Returns (match_list, info_message, is_exact_boozy_match).
     """
-    taste = user_profile.taste
-    boozy = user_profile.boozy
-    spirits_list = parse_spirits_list(user_profile.spirits)
+    taste = preferences.taste
+    boozy = preferences.boozy
+    spirits_list = parse_spirits_list(preferences.spirits)
 
     exact_qs = queryset_for_preferences(taste, boozy, spirits_list)
     if exact_qs.exists():

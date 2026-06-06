@@ -14,7 +14,7 @@
 <div class="container mt-5">
     <div class="greetings text-center mb-4">
         <h1>Voilá</h1>
-        <h3 class="text-capitalize">{{ user.username }}</h3>
+        <h3 class="text-capitalize">{% if is_guest %}Guest{% else %}{{ user.username }}{% endif %}</h3>
     </div>
 
     <div class="card cocktail-card mb-4">
@@ -43,7 +43,11 @@
                             {% csrf_token %}
                             <button type="submit" name="action" value="DMU" class="nav-cta btn-pill">Get me another one!</button>
                         </form>
+                        {% if is_guest %}
+                        <a href="{% url 'signup' %}" class="nav-cta btn-pill">Join us to save</a>
+                        {% else %}
                         <button type="button" name="action" value="YES" data-toggle="modal" data-target="#myModal" class="nav-cta btn-pill">Made it!</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -52,6 +56,7 @@
 
 {% comment %} Modal unchanged, kept for rating/comments {% endcomment %}
 
+    {% if not is_guest %}
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -60,7 +65,6 @@
                     <h5 class="modal-title" id="myModalLabel">How was your experience with {{ cocktails.cocktail }}</h5>
                 </div>
                 <div class="modal-body">
-                    <!-- Cocktail Form -->
                     <form method="POST">
                         {% csrf_token %}
                         <div class="form-check">
@@ -89,39 +93,10 @@
         </div>
     </div>
 
-    <!-- Include JQuery, Bootstrap JS for modal functionality -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    {% endif %}
 
 </div>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">How was your experience with {{ cocktails.cocktail }} </h5>   
-            </div>
-            <div class="modal-body">
-                <!-- Cocktail Form -->
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="radio" id="0" name="rate" value="Hate it!">
-                    <label for="hate">Hate it!</label><br>
-                    <input type="radio" id="1" name="rate" value="Not bad!">
-                    <label for="notbad">Not bad!</label><br>
-                    <input type="radio" id="2" name="rate" value="Well, nice!">
-                    <label for="nice">Well, nice!</label><br>
-                    <input type="radio" id="3" name="rate" value="That's the one, loved!">
-                    <label for="loved">That's the one, loved!</label><br>
-                    <input type="text" name="comment" id="comment" placeholder="Add here your comment for future reference" >
-                    <button type="submit" name="action" value="YES" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> 
-<!-- Include JQuery, Bootstrap JS for modal functionality -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 {% endblock %}

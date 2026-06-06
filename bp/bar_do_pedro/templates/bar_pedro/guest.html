@@ -1,0 +1,95 @@
+{% extends 'bar_pedro/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+{% block title %}Guest{% endblock %}
+{% block content %}
+
+<div class="content guest-content">
+    <div class="greetings">
+        <div class="hello">
+            <h1>Welcome</h1>
+            <h1 style="margin-left: 10px;">Guest</h1>
+        </div>
+        <h3 class="message">Try a drink — no account needed</h3>
+    </div>
+    <div class="row guest-row">
+        <div class="rightcolumn guest-order-column">
+            <h2>Order Here</h2>
+            <div class="order">
+                <div class="error-message">
+                    {% if error_message %}
+                        {{ error_message }}
+                    {% endif %}
+                </div>
+                <div class="tasteform">
+                    <form action="" method="post" class="tasteform" autocomplete="off">
+                        {% csrf_token %}
+                        <fieldset class="taste">
+                        <label for="taste"><h3>Taste: </h3></label>
+                            <select name="taste" id="taste">
+                                <option value="">Select one</option>
+                                <option value="Sweet">Sweet</option>
+                                <option value="Citrus">Citrus</option>
+                                <option value="Bitter">Bitter</option>
+                                <option value="Fruity">Fruity</option>
+                                <option value="Fresh">Fresh</option>
+                                <option value="Sour">Sour</option>
+                                <option value="Smoky">Smoky</option>
+                                <option value="Savory">Savory</option>
+                            </select>
+                        </fieldset>  <br>
+                        <fieldset class="spirits">
+                        <label for="spirit"> <h3>Spirits: </h3></label><br>
+                            <div class="spirits-columns">
+                                {% for column in spirits_columns %}
+                                    <div class="spirits-column">
+                                        {% for spirit in column %}
+                                            <label>
+                                                <input name="spirit" value="{{ spirit }}" id="spirit_{{ forloop.parentloop.counter }}_{{ forloop.counter }}" type="checkbox" class="inline" {% if spirit in selected_spirits %}checked{% endif %}/> {{ spirit }}
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </fieldset> <br>
+                        <fieldset class="boozy">
+                        <label for="strength"><h3>Boozy: </h3></label>
+                            <select name="strength" id="strength">
+                                <option value="">Select one</option>
+                                <option value="Strong">Strong</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Light">Light</option>
+                            </select>
+                        </fieldset>
+                        <br><br>
+                        <button class="dmu_button" type="submit" name="action" value="order">Drink me up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if show_fallback_prompt %}
+<div id="fallbackModal" class="fallback-modal">
+    <div class="fallback-modal-content">
+        <p class="fallback-modal-message">{{ fallback_message }}</p>
+        <div class="fallback-modal-actions">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="accept_fallback">
+                <button type="submit" class="fallback-btn fallback-btn-ok">OK</button>
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="dismiss_fallback">
+                <button type="submit" class="fallback-btn fallback-btn-retry">Try again</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

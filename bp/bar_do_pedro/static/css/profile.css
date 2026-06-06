@@ -474,9 +474,16 @@ button {
     background-color: rgba(209, 155, 78, 0.2);
 }
 
+.guest-content .guest-row {
+    justify-content: center;
+}
 
-
-
+.guest-content .guest-order-column {
+    flex: 0 1 600px;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+}
 
 
 

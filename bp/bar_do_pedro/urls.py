@@ -33,6 +33,8 @@ urlpatterns = [
     #Main pages
     path('', LandingPage.as_view(), name="welcome"),
     path("profile/", views.profile_view, name="profile"),
+    path("guest/", views.guest_view, name="guest"),
+    path("guest/cocktails/", views.guest_cocktails, name="guest_cocktails"),
     path('cocktails/', views.cocktails, name='cocktails'),
     path('menu/', views.menu, name='menu'),
     path('details/<int:id>/', views.cocktail_info, name='details'),
