@@ -35,7 +35,11 @@
 
                     <div class="d-flex justify-content-center mt-4 cocktail-info-actions">
                         <a href="{% url 'menu' %}" class="nav-cta btn-pill mr-2">Menu</a>
+                        {% if request.session.guest_mode and not user.is_authenticated %}
+                        <a href="{% url 'guest' %}" class="nav-cta btn-pill bar-cta">Bar</a>
+                        {% else %}
                         <a href="{% url 'profile' %}" class="nav-cta btn-pill bar-cta">Bar</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

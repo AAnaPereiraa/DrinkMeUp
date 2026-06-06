@@ -290,7 +290,6 @@ def guest_cocktails(request):
         request, preferences, "bar_pedro/cocktails.html", "guest", is_guest=True
     )
 
-@login_required
 def menu(request):
     """Display the list of all cocktails"""
     cocktails_list = Drinks.objects.all()
@@ -298,7 +297,6 @@ def menu(request):
     }
     return render(request, "bar_pedro/menu.html", context)
 
-@login_required
 def cocktail_info(request, id):
     "display all the specific cocktail information, clicked on the cocktails list page or my cocktails list"
     cocktail = Drinks.objects.get(id=id)
