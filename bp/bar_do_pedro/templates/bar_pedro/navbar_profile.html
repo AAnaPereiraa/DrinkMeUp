@@ -22,16 +22,17 @@
                 <a href="{% url 'delete' %}" class="nav-item">Delete profile</a>
             </div> 
         </div>
-        {% else %}
+        {% elif request.session.guest_mode %}
         <div class="nav-menu" id="nav-menu">
-            {% if request.session.guest_mode %}
             <div id="profile-btn">
                 <a href="{% url 'menu' %}" class="nav-item">Menu</a>
             </div>
             <div id="profile-btn">
                 <a href="{% url 'guest' %}" class="nav-item">Bar</a>
             </div>
-            {% endif %}
+        </div>
+        {% else %}
+        <div class="nav-menu" id="nav-menu">
             <div id="signin-btn">
                 <a href="{% url 'login' %}" class="nav-item">Log in</a>
             </div>
