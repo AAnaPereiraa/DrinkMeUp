@@ -47,14 +47,14 @@
                         <label for="taste"><h3>Taste: </h3></label>
                             <select name="taste" id="taste">
                                 <option value="">Select one</option>
-                                <option value="Sweet">Sweet</option>
-                                <option value="Citrus">Citrus</option>
-                                <option value="Bitter">Bitter</option>
-                                <option value="Fruity">Fruity</option>
-                                <option value="Fresh">Fresh</option>
-                                <option value="Sour">Sour</option>
-                                <option value="Smoky">Smoky</option>
-                                <option value="Savory">Savory</option>
+                                <option value="Sweet" {% if selected_taste == "Sweet" %}selected{% endif %}>Sweet</option>
+                                <option value="Citrus" {% if selected_taste == "Citrus" %}selected{% endif %}>Citrus</option>
+                                <option value="Bitter" {% if selected_taste == "Bitter" %}selected{% endif %}>Bitter</option>
+                                <option value="Fruity" {% if selected_taste == "Fruity" %}selected{% endif %}>Fruity</option>
+                                <option value="Fresh" {% if selected_taste == "Fresh" %}selected{% endif %}>Fresh</option>
+                                <option value="Sour" {% if selected_taste == "Sour" %}selected{% endif %}>Sour</option>
+                                <option value="Smoky" {% if selected_taste == "Smoky" %}selected{% endif %}>Smoky</option>
+                                <option value="Savory" {% if selected_taste == "Savory" %}selected{% endif %}>Savory</option>
                             </select>
                         </fieldset>  <br>
                         <fieldset class="spirits" >
@@ -75,12 +75,15 @@
                         <label for="strength"><h3>Boozy: </h3></label>
                             <select name="strength" id="strength">
                                 <option value="">Select one</option>
-                                <option value="Strong">Strong</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Light">Light</option>
+                                <option value="Strong" {% if selected_boozy == "Strong" %}selected{% endif %}>Strong</option>
+                                <option value="Medium" {% if selected_boozy == "Medium" %}selected{% endif %}>Medium</option>
+                                <option value="Light" {% if selected_boozy == "Light" %}selected{% endif %}>Light</option>
                             </select>
                         </fieldset>
-                        <br><br>                   
+                        {% if validation_error %}
+                        <div class="validation-error">{{ validation_error }}</div>
+                        {% endif %}
+                        <br><br>
                         <button class="dmu_button" type="submit" name="action" value="order">Drink me up</button>
                     </form>
                 </div>

@@ -152,6 +152,14 @@ h2 {
     animation-delay: 10s;
 }
 
+.validation-error {
+    color: #ff8a8a;
+    text-align: center;
+    margin: 12px 0 4px;
+    width: 100%;
+    font-size: 0.95rem;
+}
+
 @keyframes fade {
     0% {
         opacity: 1;

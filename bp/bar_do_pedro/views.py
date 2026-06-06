@@ -22,8 +22,27 @@ from .services import (
 )
 
 
+ORDER_VALIDATION_MESSAGE = "Please select taste, at least one spirit and boozy level"
+
+
+def _order_form_is_valid(request) -> bool:
+    return (
+        bool(request.POST.get("taste"))
+        and bool(request.POST.get("strength"))
+        and bool(request.POST.getlist("spirit"))
+    )
+
+
+def _order_form_context_from_post(request) -> dict:
+    return {
+        "selected_spirits": request.POST.getlist("spirit"),
+        "selected_taste": request.POST.get("taste", ""),
+        "selected_boozy": request.POST.get("strength", ""),
+    }
+
+
 def _handle_bar_form_post(request, preferences, bar_url_name, cocktails_url_name):
-    """Process order / fallback actions from the bar page. Returns redirect or None."""
+    """Process order / fallback actions from the bar page. Returns (redirect, validation_error)."""
     action = request.POST.get("action", "order")
 
     if action == "accept_fallback":
@@ -32,14 +51,17 @@ def _handle_bar_form_post(request, preferences, bar_url_name, cocktails_url_name
         request.session.pop("show_fallback_prompt", None)
         if match_pool:
             request.session["selected_cocktail"] = drink_to_session_data(random.choice(match_pool))
-            return redirect(cocktails_url_name)
-        return redirect(bar_url_name)
+            return redirect(cocktails_url_name), None
+        return redirect(bar_url_name), None
 
     if action == "dismiss_fallback":
         request.session.pop("fallback_match_pool", None)
         request.session.pop("fallback_message", None)
         request.session.pop("show_fallback_prompt", None)
-        return redirect(bar_url_name)
+        return redirect(bar_url_name), None
+
+    if not _order_form_is_valid(request):
+        return None, ORDER_VALIDATION_MESSAGE
 
     if isinstance(preferences, GuestPreferences):
         preferences.save_from_post(request)
@@ -58,16 +80,16 @@ def _handle_bar_form_post(request, preferences, bar_url_name, cocktails_url_name
 
     if not match_pool:
         request.session["message"] = recommendation_message
-        return redirect(bar_url_name)
+        return redirect(bar_url_name), None
 
     if is_exact_match:
         request.session["selected_cocktail"] = drink_to_session_data(random.choice(match_pool))
-        return redirect(cocktails_url_name)
+        return redirect(cocktails_url_name), None
 
     request.session["fallback_match_pool"] = match_pool
     request.session["fallback_message"] = recommendation_message
     request.session["show_fallback_prompt"] = True
-    return redirect(bar_url_name)
+    return redirect(bar_url_name), None
 
 
 def _render_cocktail_suggestion(request, preferences, template_name, bar_url_name, is_guest=False):
@@ -239,9 +261,14 @@ def profile_view(request):
     }
 
     if request.method == 'POST':
-        redirect_response = _handle_bar_form_post(request, user_profile, "profile", "cocktails")
+        redirect_response, validation_error = _handle_bar_form_post(
+            request, user_profile, "profile", "cocktails"
+        )
         if redirect_response:
             return redirect_response
+        if validation_error:
+            context.update(_order_form_context_from_post(request))
+            context["validation_error"] = validation_error
 
     return render(request, 'bar_pedro/profile.html', context)
 
@@ -273,9 +300,14 @@ def guest_view(request):
     }
 
     if request.method == "POST":
-        redirect_response = _handle_bar_form_post(request, preferences, "guest", "guest_cocktails")
+        redirect_response, validation_error = _handle_bar_form_post(
+            request, preferences, "guest", "guest_cocktails"
+        )
         if redirect_response:
             return redirect_response
+        if validation_error:
+            context.update(_order_form_context_from_post(request))
+            context["validation_error"] = validation_error
 
     return render(request, "bar_pedro/guest.html", context)
 
