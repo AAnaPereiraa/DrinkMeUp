@@ -15,6 +15,7 @@ from .services import (
     get_file_content_as_list,
     get_spirits_columns,
     GuestPreferences,
+    get_guest_motivational_message,
     is_suggestion_in_pool,
     resolve_drink,
     drink_to_session_data,
@@ -285,6 +286,7 @@ def guest_view(request):
     context = {
         "spirits_columns": get_spirits_columns(),
         "selected_spirits": selected_spirits,
+        "motivational_msg": get_guest_motivational_message(request),
         "show_fallback_prompt": request.session.get("show_fallback_prompt", False),
         "fallback_message": request.session.get("fallback_message", ""),
         "error_message": request.session.pop("message", None),

@@ -140,6 +140,19 @@ def get_file_content_as_list(path_file) -> list:
         return []
 
 
+def get_random_motivational_message(default="Welcome! Let's drink!") -> str:
+    messages = get_file_content_as_list(RESPONSE_FILE)
+    if messages:
+        return random.choice(messages).strip()
+    return default
+
+
+def get_guest_motivational_message(request) -> str:
+    if not request.session.get("guest_motivational_msg"):
+        request.session["guest_motivational_msg"] = get_random_motivational_message()
+    return request.session["guest_motivational_msg"]
+
+
 def get_available_spirits() -> list[str]:
     """Build a sorted list of all spirits present in the Drinks table."""
     all_spirits = set()
