@@ -262,13 +262,106 @@ h3 {
     width: 100% !important;
 }
 
-@media (max-width: 700px) {
-    .spirits-columns{
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+        min-height: 100vh;
+        height: auto;
+    }
+
+    .greetings {
+        margin-top: 90px;
+        padding: 0 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .hello {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .hello h1 {
+        font-size: clamp(1.4rem, 6vw, 2rem);
+        margin-left: 0 !important;
+    }
+
+    .message {
+        font-size: 0.95rem;
+        padding: 0 8px;
+    }
+
+    .content {
+        padding: 0 12px 24px;
+    }
+
+    .content .row {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+        gap: 24px !important;
+        padding: 0 !important;
+    }
+
+    .content .leftcolumn,
+    .content .rightcolumn {
+        max-width: 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .rightcolumn {
+        align-items: stretch;
+    }
+
+    .order {
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .tasteform,
+    form {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    select {
+        max-width: 100%;
+        min-height: 44px;
+    }
+
+    .spirits-columns {
         flex-wrap: wrap;
         gap: 12px;
     }
-    .spirits-column{ min-width: 100%; }
-    .cocktail-row { grid-template-columns: 1fr 64px minmax(120px, 1fr); }
+
+    .spirits-column {
+        min-width: calc(50% - 6px);
+        flex: 1 1 calc(50% - 6px);
+    }
+
+    .cocktail-row {
+        grid-template-columns: 1fr 56px minmax(80px, 1fr);
+        font-size: 0.85rem;
+    }
+
+    .dmu_button,
+    button {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .fallback-modal-content {
+        padding: 18px;
+    }
+
+    .fallback-btn {
+        width: 100%;
+        min-height: 44px;
+    }
 }
 
 .boozy{

@@ -35,23 +35,48 @@ body {
     display: flex;
     justify-items: center;
     flex-direction: column;
-    margin-left: 100px;
-    margin-top: 300px;
-    
+    margin-left: clamp(16px, 8vw, 100px);
+    margin-top: clamp(120px, 28vh, 300px);
+    padding: 0 16px 40px;
+    max-width: 100%;
 }
 
 .landing-container p {
-    font-size: 30px;
+    font-size: clamp(1.1rem, 4vw, 30px);
     text-align: start;
     align-self: flex-start;
 }
 
 .landing-container h1 {
-    font-size: 10vw;
+    font-size: clamp(2.5rem, 12vw, 10vw);
     color: whitesmoke;
     font-weight: 700;
     align-self: flex-start;
-    
+    line-height: 1.05;
+}
+
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+        min-height: 100vh;
+        height: auto;
+    }
+
+    .landing-actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .landing-btn {
+        width: 100%;
+        text-align: center;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .about-text {

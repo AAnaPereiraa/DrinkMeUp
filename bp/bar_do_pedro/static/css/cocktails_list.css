@@ -68,13 +68,23 @@ h1 {
 .details {
     display: flex;
     color: whitesmoke;
-    width: 400px;
-    height: 500px;
+    width: min(400px, 100%);
+    max-width: 100%;
+    min-height: auto;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     align-content: flex-start;
     flex-wrap: wrap;
+}
+
+.menu-page {
+    display: block;
+    margin-top: 100px;
+    margin-left: 10px;
+    padding: 0 16px 32px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .list {
@@ -177,4 +187,33 @@ a:hover, a:active {
 }
 .hidden-list ul{ list-style: none; padding-left: 0; }
 .hidden-list li{ padding: 6px 0; }
+
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+        min-height: 100vh;
+        height: auto;
+    }
+
+    .menu-page {
+        margin-top: 90px;
+        margin-left: 0;
+        padding: 0 12px 24px;
+    }
+
+    .grouped-list {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .group .button {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .list {
+        margin-left: 0;
+    }
+}
 

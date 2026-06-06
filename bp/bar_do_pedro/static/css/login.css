@@ -323,6 +323,33 @@ button:not(.login-action-btn) {
     margin: auto;
 }
 
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+        min-height: 100vh;
+        height: auto;
+    }
+
+    .login-main {
+        margin-top: 90px;
+        padding: 0 16px 32px;
+    }
+
+    .quote-text {
+        font-size: clamp(1.75rem, 8vw, 3rem);
+        margin: 12px 8px 20px;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 360px;
+    }
+
+    .login-action-btn {
+        min-height: 44px;
+    }
+}
+
 
 
 

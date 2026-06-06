@@ -233,6 +233,55 @@ h1 {
     border-radius: 30px;
 }
 
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+        min-height: 100vh;
+        height: auto;
+    }
+
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-top: 80px !important;
+    }
+
+    .greetings {
+        margin-top: 20px;
+        padding: 0 8px;
+    }
+
+    .greetings h1 {
+        font-size: clamp(1.75rem, 8vw, 2.5rem);
+    }
+
+    .cocktail-image {
+        max-height: 280px;
+        margin-bottom: 16px;
+    }
+
+    .cocktail-card .card-body {
+        padding: 12px 4px;
+    }
+
+    .cocktail-info-page {
+        margin-top: 90px;
+        padding: 0 12px 24px;
+    }
+
+    .nav-cta.btn-pill {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-dialog {
+        margin: 80px auto 1rem;
+        max-width: calc(100vw - 24px);
+    }
+}
+
 /* Specific style for the Bar button: more oval, less rounded */
 .bar-btn{
     border-radius: 12px !important;
