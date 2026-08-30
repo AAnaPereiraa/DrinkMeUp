@@ -62,17 +62,18 @@ class ProfileFormRestoreTests(DrinkFactoryMixin, TestCase):
         self.profile.spirits = "White Rum, Gin"
         self.profile.save()
 
-    def test_profile_form_restores_last_order(self):
+    def test_profile_form_is_empty_when_back_at_bar(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse("profile"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'value="Fresh" selected')
-        self.assertContains(response, 'value="Light" selected')
-        self.assertContains(response, 'value="White Rum"')
-        self.assertContains(response, "checked")
-        self.assertEqual(response.context["selected_spirits"], ["White Rum", "Gin"])
+        self.assertEqual(response.context["selected_taste"], "")
+        self.assertEqual(response.context["selected_boozy"], "")
+        self.assertEqual(response.context["selected_spirits"], [])
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.taste, "")
+        self.assertEqual(self.profile.spirits, "")
 
-    def test_guest_form_restores_session_order(self):
+    def test_guest_form_is_empty_when_back_at_bar(self):
         session = self.client.session
         session["guest_taste"] = "Citrus"
         session["guest_boozy"] = "Medium"
@@ -82,9 +83,30 @@ class ProfileFormRestoreTests(DrinkFactoryMixin, TestCase):
 
         response = self.client.get(reverse("guest"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context["selected_taste"], "Citrus")
-        self.assertEqual(response.context["selected_boozy"], "Medium")
-        self.assertEqual(response.context["selected_spirits"], ["Gin"])
+        self.assertEqual(response.context["selected_taste"], "")
+        self.assertEqual(response.context["selected_boozy"], "")
+        self.assertEqual(response.context["selected_spirits"], [])
+
+    def test_no_match_clears_the_order_form(self):
+        self.client.force_login(self.user)
+        response = self.client.post(
+            reverse("profile"),
+            {
+                "taste": "Smoky",
+                "strength": "Strong",
+                "spirit": ["Gin"],
+                "action": "order",
+            },
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "no cocktail match")
+        self.assertEqual(response.context["selected_taste"], "")
+        self.assertEqual(response.context["selected_spirits"], [])
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.taste, "")
+        self.assertEqual(self.profile.boozy, "")
+        self.assertEqual(self.profile.spirits, "")
 
 
 class MissingRowTests(DrinkFactoryMixin, TestCase):

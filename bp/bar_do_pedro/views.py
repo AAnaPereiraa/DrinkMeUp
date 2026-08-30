@@ -24,7 +24,8 @@ from .services import (
     RESPONSE_FILE,
     drink_to_session_data,
     find_suggestion_pool,
-    form_selection_from_preferences,
+    clear_order_preferences,
+    empty_form_selection,
     get_file_content_as_list,
     get_guest_motivational_message,
     get_or_create_user_profile,
@@ -71,6 +72,7 @@ def _handle_bar_form_post(request, preferences, bar_url_name, cocktails_url_name
         request.session.pop("fallback_match_pool", None)
         request.session.pop("fallback_message", None)
         request.session.pop("show_fallback_prompt", None)
+        clear_order_preferences(preferences, request)
         return redirect(bar_url_name), None
 
     if not _order_form_is_valid(request):
@@ -93,6 +95,7 @@ def _handle_bar_form_post(request, preferences, bar_url_name, cocktails_url_name
 
     if not match_pool:
         request.session["message"] = recommendation_message
+        clear_order_preferences(preferences, request)
         return redirect(bar_url_name), None
 
     if is_exact_match:
@@ -111,6 +114,7 @@ def _render_cocktail_suggestion(request, preferences, template_name, bar_url_nam
 
     if not match_pool:
         request.session["message"] = computed_message
+        clear_order_preferences(preferences, request)
         return redirect(bar_url_name)
 
     cocktail_suggestion = None
@@ -163,7 +167,7 @@ def _render_cocktail_suggestion(request, preferences, template_name, bar_url_nam
             )
 
             preferences.latest_post = random.choice(get_file_content_as_list(RESPONSE_FILE))
-            preferences.spirits = ""
+            clear_order_preferences(preferences, request)
             preferences.save()
 
             del request.session["selected_cocktail"]
@@ -278,8 +282,11 @@ def profile_view(request):
         'show_fallback_prompt': request.session.get('show_fallback_prompt', False),
         'fallback_message': request.session.get('fallback_message', ''),
         'error_message': request.session.pop('message', None),
-        **form_selection_from_preferences(user_profile),
+        **empty_form_selection(),
     }
+
+    if request.method != "POST" and not context["show_fallback_prompt"]:
+        clear_order_preferences(user_profile, request)
 
     if request.method == 'POST':
         redirect_response, validation_error = _handle_bar_form_post(
@@ -317,8 +324,11 @@ def guest_view(request):
         "show_fallback_prompt": request.session.get("show_fallback_prompt", False),
         "fallback_message": request.session.get("fallback_message", ""),
         "error_message": request.session.pop("message", None),
-        **form_selection_from_preferences(preferences),
+        **empty_form_selection(),
     }
+
+    if request.method != "POST" and not context["show_fallback_prompt"]:
+        clear_order_preferences(preferences, request)
 
     if request.method == "POST":
         redirect_response, validation_error = _handle_bar_form_post(

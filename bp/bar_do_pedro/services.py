@@ -60,6 +60,28 @@ def get_or_create_user_profile(user) -> UserProfile:
     return profile
 
 
+def clear_order_preferences(preferences, request=None) -> None:
+    """Reset taste / spirits / boozy so the bar form starts empty."""
+    preferences.taste = ""
+    preferences.boozy = ""
+    preferences.spirits = ""
+    if isinstance(preferences, GuestPreferences):
+        if request is not None:
+            request.session["guest_taste"] = ""
+            request.session["guest_boozy"] = ""
+            request.session["guest_spirits"] = ""
+        return
+    preferences.save(update_fields=["taste", "boozy", "spirits"])
+
+
+def empty_form_selection() -> dict:
+    return {
+        "selected_taste": "",
+        "selected_boozy": "",
+        "selected_spirits": [],
+    }
+
+
 def form_selection_from_preferences(preferences) -> dict:
     """Values the order form needs to restore the last taste / spirits / boozy."""
     taste = getattr(preferences, "taste", "") or ""
@@ -284,6 +306,8 @@ def record_drink_made(user, rate: str, comment: str) -> DrinksMade:
     messages = get_file_content_as_list(RESPONSE_FILE)
     if messages:
         user_profile.latest_post = random.choice(messages)
+    user_profile.taste = ""
+    user_profile.boozy = ""
     user_profile.spirits = ""
     user_profile.save()
     clear_stored_suggestion(user.id)
