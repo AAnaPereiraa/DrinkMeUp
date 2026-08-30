@@ -18,9 +18,12 @@ from django.contrib.auth import views as auth_views
 from django.contrib import admin
 from django.urls import include, path
 
+from bar_do_pedro.views import google_login_gate
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("bar_do_pedro.api.urls")),
+    path("accounts/google/login/", google_login_gate, name="google_login"),
     path("accounts/", include("allauth.urls")),
     path("", include("bar_do_pedro.urls")),
 ]

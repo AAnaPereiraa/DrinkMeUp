@@ -43,10 +43,12 @@
                 {% endif %}
                 <div class="login-actions">
                     <button type="submit" class="login-action-btn">Sign up</button>
+                    {% if google_login_enabled %}
                     <a href="{% provider_login_url 'google' %}" class="login-action-btn login-action-btn--google">
                         <img src="{% static 'google.png' %}" alt="Google" class="google-icon">
                         Log in with Google
                     </a>
+                    {% endif %}
                     <a href="{% url 'login' %}" class="login-action-btn">Already have an account</a>
                 </div>
             </form>

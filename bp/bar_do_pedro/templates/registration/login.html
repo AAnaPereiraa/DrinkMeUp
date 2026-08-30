@@ -26,10 +26,12 @@
                 </p>
                 <div class="login-actions">
                     <button type="submit" class="login-action-btn">Log In</button>
+                    {% if google_login_enabled %}
                     <a href="{% provider_login_url 'google' %}" class="login-action-btn login-action-btn--google">
                         <img src="{% static 'google.png' %}" alt="Google" class="google-icon">
                         Log in with Google
                     </a>
+                    {% endif %}
                     <a href="{% url 'signup' %}" class="login-action-btn">Join us</a>
                 </div>
             </form>

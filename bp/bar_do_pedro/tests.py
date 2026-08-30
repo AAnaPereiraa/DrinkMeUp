@@ -85,6 +85,14 @@ class GoogleLoginPageTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn("accounts.google.com", response["Location"])
 
+    def test_login_page_hides_google_when_not_configured(self):
+        from django.test import override_settings
+
+        with override_settings(SOCIALACCOUNT_PROVIDERS={"google": {}}):
+            response = self.client.get(reverse("login"))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "Log in with Google")
+
 
 class ProfileFormRestoreTests(DrinkFactoryMixin, TestCase):
     def setUp(self):

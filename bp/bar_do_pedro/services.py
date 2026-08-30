@@ -1,6 +1,7 @@
 import random
 from pathlib import Path
 
+from django.conf import settings
 from django.core.cache import cache
 
 from .models import Drinks, DrinksMade, UserProfile
@@ -19,6 +20,21 @@ BOOZY_LABELS = {
 }
 SUGGESTION_CACHE_TTL = 60 * 60 * 24
 NO_MATCH_MESSAGE = "Unfortunately there is no cocktail match!!! Please try again =)"
+
+
+def google_oauth_is_configured() -> bool:
+    """True when a Google OAuth client id and secret are available."""
+    app = (getattr(settings, "SOCIALACCOUNT_PROVIDERS", {}) or {}).get("google", {}).get(
+        "APP"
+    ) or {}
+    if (app.get("client_id") or "").strip() and (app.get("secret") or "").strip():
+        return True
+    try:
+        from allauth.socialaccount.models import SocialApp
+
+        return SocialApp.objects.filter(provider="google").exclude(client_id="").exists()
+    except Exception:
+        return False
 
 
 def shift_boozy(boozy: str, direction: int) -> str | None:

@@ -30,6 +30,7 @@ from .services import (
     get_guest_motivational_message,
     get_or_create_user_profile,
     get_spirits_columns,
+    google_oauth_is_configured,
     GuestPreferences,
     is_suggestion_in_pool,
     resolve_drink,
@@ -220,6 +221,20 @@ class CustomLoginView(LoginView):
     """This view uses a custom template to display the login form."""
     template_name = "registration/login.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["google_login_enabled"] = google_oauth_is_configured()
+        return context
+
+
+def google_login_gate(request):
+    """Show a setup message when Google OAuth is not configured."""
+    if google_oauth_is_configured():
+        from allauth.socialaccount.providers.google.views import oauth2_login
+
+        return oauth2_login(request)
+    return render(request, "socialaccount/login_unavailable.html")
+
 ## Signup
 def signup_view(request):
     """View that lets the user signup to the page. Sends a welcome mail upon successfull signup"""
@@ -235,10 +250,18 @@ def signup_view(request):
             login(request, user)    
             return redirect("profile")
         else:
-            return render(request, "registration/signup.html", {"form":form})
+            return render(
+                request,
+                "registration/signup.html",
+                {"form": form, "google_login_enabled": google_oauth_is_configured()},
+            )
     else: 
         form = BarUserForm()
-    return render(request, "registration/signup.html", {"form":form})
+    return render(
+        request,
+        "registration/signup.html",
+        {"form": form, "google_login_enabled": google_oauth_is_configured()},
+    )
 
 
 #logout functionality
