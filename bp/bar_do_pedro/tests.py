@@ -56,6 +56,18 @@ class LegalPagesTests(TestCase):
         self.assertEqual(self.client.get("/privacy-policy.html").status_code, 200)
 
 
+class MenuLabelsTests(TestCase):
+    def test_menu_uses_boozy_nicknames(self):
+        response = self.client.get(reverse("menu"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Starting slow")
+        self.assertContains(response, "It's getting hot in here")
+        self.assertContains(response, "to infinity and beyond")
+        self.assertNotContains(response, ">Light<")
+        self.assertNotContains(response, ">Medium<")
+        self.assertNotContains(response, ">Strong<")
+
+
 class ProfileFormRestoreTests(DrinkFactoryMixin, TestCase):
     def setUp(self):
         self.make_drink(cocktail="Mojito", spirits="White Rum", taste="Fresh", boozy="Light")

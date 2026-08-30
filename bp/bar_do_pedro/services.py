@@ -13,8 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent
 RESPONSE_FILE = BASE_DIR / "templates/tough_responses.txt"
 BOOZY_LEVELS = ["Light", "Medium", "Strong"]
 BOOZY_LABELS = {
-    "Light": "starting slow",
-    "Medium": "it's getting hot in here",
+    "Light": "Starting slow",
+    "Medium": "It's getting hot in here",
     "Strong": "to infinity and beyond",
 }
 SUGGESTION_CACHE_TTL = 60 * 60 * 24

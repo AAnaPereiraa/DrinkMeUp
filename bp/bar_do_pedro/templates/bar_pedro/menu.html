@@ -12,7 +12,7 @@
         <h1>Cocktails List</h1>
         <div class="list grouped-list">
             <div class="group">
-                <button class="button group-btn" data-group="Light">Light</button>
+                <button class="button group-btn" data-group="Light">Starting slow</button>
                 <div class="hidden-list" id="list-Light" style="display:none;">
                     <ul>
                     {% for x in menu %}{% if x.boozy == 'Light' %}
@@ -23,7 +23,7 @@
             </div>
 
             <div class="group">
-                <button class="button group-btn" data-group="Medium">Medium</button>
+                <button class="button group-btn" data-group="Medium">It's getting hot in here</button>
                 <div class="hidden-list" id="list-Medium" style="display:none;">
                     <ul>
                     {% for x in menu %}{% if x.boozy == 'Medium' %}
@@ -34,7 +34,7 @@
             </div>
 
             <div class="group">
-                <button class="button group-btn" data-group="Strong">Strong</button>
+                <button class="button group-btn" data-group="Strong">to infinity and beyond</button>
                 <div class="hidden-list" id="list-Strong" style="display:none;">
                     <ul>
                     {% for x in menu %}{% if x.boozy == 'Strong' %}
@@ -66,7 +66,7 @@
                 btn.addEventListener('click', () => {
                     const group = btn.getAttribute('data-group');
                     const src = document.getElementById('list-' + group);
-                    modalTitle.textContent = group + ' cocktails';
+                    modalTitle.textContent = btn.textContent.trim();
                     modalBody.innerHTML = src ? src.innerHTML : '<p>No drinks</p>';
                     modal.style.display = 'flex';
                 });
