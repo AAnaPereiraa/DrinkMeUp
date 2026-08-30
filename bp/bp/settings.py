@@ -143,7 +143,7 @@ DATABASES = {
     }
 }
 
-if os.getenv("DATABASE_URL"):
+if os.getenv("DATABASE_URL") and not TESTING:
     # Neon pooler (PgBouncer) does not support persistent Django connections.
     database_url = os.getenv("DATABASE_URL", "")
     conn_max_age = 0 if "-pooler" in database_url else 600

@@ -1,5 +1,4 @@
 import random
-import re
 from pathlib import Path
 
 from django.core.cache import cache
@@ -34,20 +33,26 @@ def shift_boozy(boozy: str, direction: int) -> str | None:
     return None
 
 
-def spirits_match_regex(spirits_list: list[str]) -> str:
-    """Build a word-boundary regex from user-supplied spirit names (escaped)."""
-    escaped = [re.escape(spirit) for spirit in spirits_list if spirit]
-    if not escaped:
-        return r"(?!)"
-    return rf"\b({'|'.join(escaped)})\b"
+def drink_has_any_spirit(drink_spirits: str, selected_spirits: list[str]) -> bool:
+    """True if the drink's comma-separated spirits overlap the user's selection."""
+    selected = {spirit.casefold() for spirit in selected_spirits if spirit}
+    if not selected:
+        return True
+    drink_set = {spirit.casefold() for spirit in parse_spirits_list(drink_spirits)}
+    return bool(selected & drink_set)
 
 
 def queryset_for_preferences(taste: str, boozy: str, spirits_list: list[str]):
     """Return drinks matching taste, boozy, and optional spirits."""
     queryset = Drinks.objects.filter(boozy=boozy, taste=taste)
-    if spirits_list:
-        queryset = queryset.filter(spirits__regex=spirits_match_regex(spirits_list))
-    return queryset
+    if not spirits_list:
+        return queryset
+    matching_ids = [
+        drink.pk
+        for drink in queryset
+        if drink_has_any_spirit(drink.spirits, spirits_list)
+    ]
+    return Drinks.objects.filter(pk__in=matching_ids)
 
 
 def get_or_create_user_profile(user) -> UserProfile:
@@ -163,11 +168,9 @@ def get_matching_drinks(user_profile: UserProfile):
     """Return matching drink queryset and selected spirits list."""
     spirits_list = parse_spirits_list(user_profile.spirits)
     match1 = Drinks.objects.filter(boozy=user_profile.boozy, taste=user_profile.taste)
-    if spirits_list:
-        match2_qs = match1.filter(spirits__regex=spirits_match_regex(spirits_list))
-    else:
-        match2_qs = match1
-
+    match2_qs = queryset_for_preferences(
+        user_profile.taste, user_profile.boozy, spirits_list
+    )
     return match1, match2_qs, spirits_list
 
 

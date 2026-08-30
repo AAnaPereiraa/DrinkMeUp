@@ -162,7 +162,7 @@ class SuggestionServiceTests(DrinkFactoryMixin, TestCase):
         self.assertIsNotNone(message)
         self.assertEqual({drink["id"] for drink in pool}, {stronger.id})
 
-    def test_regex_metacharacters_in_spirits_do_not_match_everything(self):
+    def test_spirit_tokens_are_matched_exactly(self):
         gin = self.make_drink(cocktail="Gin Fizz", spirits="Gin", taste="Sour", boozy="Light")
         self.make_drink(cocktail="Vodka Sour", spirits="Vodka", taste="Sour", boozy="Light")
         profile = UserProfile(taste="Sour", boozy="Light", spirits=".*")
