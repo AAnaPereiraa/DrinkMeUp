@@ -27,6 +27,12 @@ h2 {
     font-family: 'Brush Script MT', cursive;
 }
 
+.content {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .greetings {
     display: block;
     margin: auto;
@@ -34,6 +40,7 @@ h2 {
     text-align: center;
     margin-top: 80px;
     width: fit-content;
+    max-width: 100%;
     padding: 10px;
 }
 
@@ -45,36 +52,37 @@ h2 {
 }
 
 .row {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
     margin-top: 20px;
-    flex-wrap: nowrap;
     color: whitesmoke;
     max-width: 1200px;
-    width: calc(100% - 32px);
+    width: calc(100% - 24px);
     margin-left: auto;
     margin-right: auto;
-    justify-content: flex-start;
-    gap: 24px;
-    padding: 0 8px 0 0;
+    gap: 28px;
+    padding: 0 0 32px;
 }
 
 .leftcolumn {
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
-    flex: 1 1 auto;
     min-width: 0;
-    max-width: calc(100% - 340px);
-    margin-right: 20px;
+    max-width: 100%;
+    width: 100%;
     height: auto;
     align-items: stretch;
-    padding: 12px 0 12px 0;
+    padding: 12px 0;
+    position: relative;
+    z-index: 1;
 }
 
 .details {
     display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 8px;
     margin-top: 30px;
@@ -130,19 +138,21 @@ h2 {
 .rightcolumn {
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
-    flex: 0 0 320px;
     min-width: 0;
+    max-width: 100%;
+    width: 100%;
     height: auto;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
+    align-items: stretch;
+    text-align: left;
+    padding: 12px 0;
+    position: relative;
+    z-index: 1;
 }
 
 .order {
-    width: auto;
-    max-width: 760px; /* allow two-or-more columns side-by-side */
-    margin-top: 50px;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 16px;
 }
 
 .error-message {
@@ -208,17 +218,19 @@ h3 {
 
 .spirits-columns{
     display: flex;
-    gap: 20px;
+    gap: 12px 20px;
     align-items: flex-start;
-    flex-wrap: nowrap; /* keep columns side-by-side on wide screens */
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
 }
 
 .spirits-column{
     display: flex;
     flex-direction: column;
     gap: 6px;
-    min-width: 160px;
+    min-width: 140px;
+    flex: 1 1 140px;
 }
 
 .spirits-column label {
@@ -228,40 +240,32 @@ h3 {
     color: whitesmoke;
 }
 
-/* Desktop: two-column profile layout */
-@media (min-width: 769px) {
+/* Two columns only when both panels have real room */
+@media (min-width: 1100px) {
     .content .row {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        column-gap: 12px !important;
-        align-items: start !important;
-        justify-content: flex-start !important;
-        gap: 12px !important;
-        padding: 0 8px !important;
-        max-width: none !important;
-        width: 100% !important;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 32px;
+        max-width: 1200px;
+        width: calc(100% - 48px);
     }
 
-    .content .leftcolumn {
-        margin-left: 0 !important;
-        margin-right: 12px !important;
-        max-width: none !important;
-        padding-right: 8px !important;
+    .content .leftcolumn,
+    .content .rightcolumn {
+        width: 100%;
+        max-width: 100%;
     }
 
     .content .rightcolumn {
-        flex: none !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        padding-left: 12px !important;
+        text-align: center;
+        align-items: center;
     }
 
     .content .details {
-        width: 100% !important;
+        width: 100%;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1099px) {
     body {
         background-attachment: scroll;
     }
@@ -291,7 +295,7 @@ h3 {
     .content {
         padding: 0 12px 32px;
         width: 100%;
-        overflow: visible;
+        overflow-x: hidden;
     }
 
     .content .row {
