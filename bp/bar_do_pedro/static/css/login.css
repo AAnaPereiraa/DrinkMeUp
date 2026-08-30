@@ -31,7 +31,8 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
 }
 
 body h1 {

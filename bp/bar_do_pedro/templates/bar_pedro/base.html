@@ -9,6 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
         {% block extra_css %}{% endblock %}
         {% block bootstrap %}{% endblock %}
+        <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     </head>
     <body>
         <header>
@@ -19,8 +20,13 @@
             {% endblock %}
         </main>
         <footer class="site-footer">
-            <a href="{% url 'imprint' %}">Imprint</a>
-            <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+            <div class="site-footer-inner">
+                <span class="site-footer-name">DrinkMeUp</span>
+                <nav class="site-footer-links" aria-label="Legal">
+                    <a href="{% url 'imprint' %}">Imprint</a>
+                    <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+                </nav>
+            </div>
         </footer>
 
     </body>

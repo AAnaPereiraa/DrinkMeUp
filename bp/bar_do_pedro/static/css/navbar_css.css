@@ -83,23 +83,6 @@
     font: inherit;
 }
 
-.site-footer {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    padding: 16px 16px 32px;
-}
-
-.site-footer a {
-    color: #d19b4e;
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-.site-footer a:hover {
-    color: whitesmoke;
-}
-
 .nav-item:hover {
     color: #b3b3b3;
 }
