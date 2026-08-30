@@ -257,6 +257,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SOCIALACCOUNT_ADAPTER = 'bar_do_pedro.adapters.CustomSocialAccountAdapter'
+# Do not send mail on Google signup. Render free blocks SMTP, and that 500s the callback.
+ACCOUNT_EMAIL_VERIFICATION = "none"
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+SOCIALACCOUNT_AUTO_SIGNUP = True
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https" if not DEBUG else "http"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -279,22 +284,28 @@ CORS_ALLOWED_ORIGINS = [
     if origin.strip()
 ]
 
+_google_client_id = os.getenv("GOOGLE_CLIENT_ID") or ""
+_google_client_secret = os.getenv("GOOGLE_CLIENT_SECRET") or ""
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
-        'APP': {
-            'client_id': os.getenv("GOOGLE_CLIENT_ID"),
-            'secret': os.getenv("GOOGLE_CLIENT_SECRET"),
-            'key': ''
-        },
         "SCOPE": [
             "profile",
             "email",
         ],
         "AUTH_PARAMS": {
-            "access_type":"online"
-        }, 
+            "access_type": "online",
+        },
     }
 }
+if TESTING and not (_google_client_id and _google_client_secret):
+    _google_client_id = "test-google-client-id"
+    _google_client_secret = "test-google-client-secret"
+if _google_client_id and _google_client_secret:
+    SOCIALACCOUNT_PROVIDERS["google"]["APP"] = {
+        "client_id": _google_client_id,
+        "secret": _google_client_secret,
+        "key": "",
+    }
 
 if not DEBUG and not TESTING:
     SECURE_SSL_REDIRECT = True

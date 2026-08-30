@@ -1,0 +1,38 @@
+{% extends 'bar_pedro/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block title %}Finish Google sign-up{% endblock %}
+
+{% block content %}
+<div class="login-main">
+    <div class="quote-text">
+        <h2>GET YOUR<br>DRINK</h2>
+    </div>
+    <div class="login-menu">
+        <div class="login-box">
+            <h1>Finish signing up</h1>
+            <p>Choose a username to complete your Google account.</p>
+            <form method="post" action="{% url 'socialaccount_signup' %}">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+                {% for field in form %}
+                <div class="form-group">
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="alert-danger">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <div class="login-actions">
+                    <button type="submit" class="login-action-btn">Continue</button>
+                    <a href="{% url 'login' %}" class="login-action-btn">Back to log in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

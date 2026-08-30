@@ -80,6 +80,11 @@ class GoogleLoginPageTests(TestCase):
         self.assertContains(response, "Sign in with Google")
         self.assertContains(response, "login.css")
 
+    def test_google_continue_redirects_to_google(self):
+        response = self.client.post(reverse("google_login"))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("accounts.google.com", response["Location"])
+
 
 class ProfileFormRestoreTests(DrinkFactoryMixin, TestCase):
     def setUp(self):

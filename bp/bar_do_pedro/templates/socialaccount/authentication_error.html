@@ -1,0 +1,27 @@
+{% extends 'bar_pedro/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block title %}Google sign-in failed{% endblock %}
+
+{% block content %}
+<div class="login-main">
+    <div class="quote-text">
+        <h2>GET YOUR<br>DRINK</h2>
+    </div>
+    <div class="login-menu">
+        <div class="login-box">
+            <h1>Google sign-in failed</h1>
+            <p>We could not finish signing you in with Google. Please try again, or use your username and password.</p>
+            <div class="login-actions">
+                <a href="{% url 'google_login' %}" class="login-action-btn login-action-btn--google">
+                    <img src="{% static 'google.png' %}" alt="" class="google-icon">
+                    Try Google again
+                </a>
+                <a href="{% url 'login' %}" class="login-action-btn">Back to log in</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
