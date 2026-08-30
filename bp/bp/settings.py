@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 dotenv_path = BASE_DIR / ".env"
-dotenv.read_dotenv(dotenv_path)
+if dotenv_path.exists():
+    dotenv.read_dotenv(dotenv_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -106,8 +107,7 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-if not DEBUG:
-    MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 ROOT_URLCONF = "bp.urls"
 
@@ -144,8 +144,11 @@ DATABASES = {
 }
 
 if os.getenv("DATABASE_URL"):
+    # Neon pooler (PgBouncer) does not support persistent Django connections.
+    database_url = os.getenv("DATABASE_URL", "")
+    conn_max_age = 0 if "-pooler" in database_url else 600
     DATABASES["default"] = dj_database_url.config(
-        conn_max_age=600,
+        conn_max_age=conn_max_age,
         ssl_require=True,
     )
 
@@ -191,15 +194,9 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "bar_do_pedro/media"
 STATICFILES_DIRS = [BASE_DIR / "bar_do_pedro/static"]
 
-if not DEBUG:
-    STORAGES = {
-        "default": {
-            "BACKEND": "django.core.files.storage.FileSystemStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
-        },
-    }
+# Serve app static files even if collectstatic did not run on the host.
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = DEBUG
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
