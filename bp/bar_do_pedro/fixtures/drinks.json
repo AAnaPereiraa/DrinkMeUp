@@ -1025,5 +1025,421 @@
       "instructions": "Combine Bourbon with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
       "image": "media/cocktails/gold_rush.jpg"
     }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 80,
+    "fields": {
+      "cocktail": "Rossini",
+      "spirits": "Prosecco",
+      "taste": "Sweet",
+      "boozy": "Light",
+      "ingredients": "Prosecco, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Prosecco with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/rossini.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 81,
+    "fields": {
+      "cocktail": "Lemon Drop",
+      "spirits": "Vodka",
+      "taste": "Citrus",
+      "boozy": "Medium",
+      "ingredients": "Vodka, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/lemon_drop.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 82,
+    "fields": {
+      "cocktail": "Airmail",
+      "spirits": "White Rum",
+      "taste": "Citrus",
+      "boozy": "Medium",
+      "ingredients": "White Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine White Rum with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/airmail.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 83,
+    "fields": {
+      "cocktail": "White Wine Spritzer",
+      "spirits": "Wine",
+      "taste": "Citrus",
+      "boozy": "Light",
+      "ingredients": "Wine, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Wine with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/white_wine_spritzer.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 84,
+    "fields": {
+      "cocktail": "Mimosa",
+      "spirits": "Prosecco",
+      "taste": "Citrus",
+      "boozy": "Light",
+      "ingredients": "Prosecco, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Prosecco with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/mimosa.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 85,
+    "fields": {
+      "cocktail": "Tequila Negroni",
+      "spirits": "Tequila, Vermouth, Campari",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Tequila, Vermouth, Campari, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Tequila, Vermouth, Campari with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/tequila_negroni.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 86,
+    "fields": {
+      "cocktail": "Kingston Negroni",
+      "spirits": "Rum, Vermouth, Campari",
+      "taste": "Bitter",
+      "boozy": "Strong",
+      "ingredients": "Rum, Vermouth, Campari, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rum, Vermouth, Campari with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/kingston_negroni.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 87,
+    "fields": {
+      "cocktail": "Adonis",
+      "spirits": "Wine, Vermouth",
+      "taste": "Bitter",
+      "boozy": "Light",
+      "ingredients": "Wine, Vermouth, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Wine, Vermouth with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/adonis.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 88,
+    "fields": {
+      "cocktail": "Whiskey Smash",
+      "spirits": "Whiskey",
+      "taste": "Fruity",
+      "boozy": "Medium",
+      "ingredients": "Whiskey, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Whiskey with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/whiskey_smash.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 89,
+    "fields": {
+      "cocktail": "Jack Rose",
+      "spirits": "Brandy",
+      "taste": "Fruity",
+      "boozy": "Medium",
+      "ingredients": "Brandy, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Brandy with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/jack_rose.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 90,
+    "fields": {
+      "cocktail": "Ranch Water",
+      "spirits": "Tequila",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Tequila, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Tequila with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/ranch_water.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 91,
+    "fields": {
+      "cocktail": "Tinto de Verano",
+      "spirits": "Wine",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Wine, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Wine with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/tinto_de_verano.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 92,
+    "fields": {
+      "cocktail": "Horse's Neck",
+      "spirits": "Brandy",
+      "taste": "Fresh",
+      "boozy": "Light",
+      "ingredients": "Brandy, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Brandy with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/horses_neck.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 93,
+    "fields": {
+      "cocktail": "Vodka Sour",
+      "spirits": "Vodka",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "Vodka, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/vodka_sour.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 94,
+    "fields": {
+      "cocktail": "Tequila Sour",
+      "spirits": "Tequila",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "Tequila, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Tequila with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/tequila_sour.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 95,
+    "fields": {
+      "cocktail": "Wine Sour",
+      "spirits": "Wine",
+      "taste": "Sour",
+      "boozy": "Light",
+      "ingredients": "Wine, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Wine with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/wine_sour.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 96,
+    "fields": {
+      "cocktail": "Brandy Sour",
+      "spirits": "Brandy",
+      "taste": "Sour",
+      "boozy": "Medium",
+      "ingredients": "Brandy, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Brandy with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/brandy_sour.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 97,
+    "fields": {
+      "cocktail": "Lemon Spritz",
+      "spirits": "Prosecco",
+      "taste": "Sour",
+      "boozy": "Light",
+      "ingredients": "Prosecco, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Prosecco with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/lemon_spritz.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 98,
+    "fields": {
+      "cocktail": "Smoky Martini",
+      "spirits": "Gin",
+      "taste": "Smoky",
+      "boozy": "Strong",
+      "ingredients": "Gin, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/smoky_martini.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 99,
+    "fields": {
+      "cocktail": "Smoked Vodka Martini",
+      "spirits": "Vodka",
+      "taste": "Smoky",
+      "boozy": "Strong",
+      "ingredients": "Vodka, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Vodka with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/smoked_vodka_martini.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 100,
+    "fields": {
+      "cocktail": "Mezcal Margarita",
+      "spirits": "Tequila",
+      "taste": "Smoky",
+      "boozy": "Medium",
+      "ingredients": "Tequila, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Tequila with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/mezcal_margarita.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 101,
+    "fields": {
+      "cocktail": "Rum Old Fashioned",
+      "spirits": "Rum",
+      "taste": "Smoky",
+      "boozy": "Strong",
+      "ingredients": "Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rum with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/rum_old_fashioned.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 102,
+    "fields": {
+      "cocktail": "Oloroso Cobbler",
+      "spirits": "Wine",
+      "taste": "Smoky",
+      "boozy": "Light",
+      "ingredients": "Wine, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Wine with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/oloroso_cobbler.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 103,
+    "fields": {
+      "cocktail": "Brandy Old Fashioned",
+      "spirits": "Brandy",
+      "taste": "Smoky",
+      "boozy": "Strong",
+      "ingredients": "Brandy, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Brandy with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/brandy_old_fashioned.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 104,
+    "fields": {
+      "cocktail": "Smoky Spritz",
+      "spirits": "Prosecco",
+      "taste": "Smoky",
+      "boozy": "Light",
+      "ingredients": "Prosecco, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Prosecco with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/smoky_spritz.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 105,
+    "fields": {
+      "cocktail": "Dirty Martini",
+      "spirits": "Gin, Vermouth",
+      "taste": "Savory",
+      "boozy": "Strong",
+      "ingredients": "Gin, Vermouth, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Gin, Vermouth with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/dirty_martini.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 106,
+    "fields": {
+      "cocktail": "Bloody Maria",
+      "spirits": "Tequila",
+      "taste": "Savory",
+      "boozy": "Medium",
+      "ingredients": "Tequila, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Tequila with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/bloody_maria.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 107,
+    "fields": {
+      "cocktail": "Bloody Pirate",
+      "spirits": "Rum",
+      "taste": "Savory",
+      "boozy": "Medium",
+      "ingredients": "Rum, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Rum with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/bloody_pirate.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 108,
+    "fields": {
+      "cocktail": "Bamboo",
+      "spirits": "Wine, Vermouth",
+      "taste": "Savory",
+      "boozy": "Light",
+      "ingredients": "Wine, Vermouth, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Wine, Vermouth with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/bamboo.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 109,
+    "fields": {
+      "cocktail": "Bloody Brandy",
+      "spirits": "Brandy",
+      "taste": "Savory",
+      "boozy": "Medium",
+      "ingredients": "Brandy, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Brandy with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/bloody_brandy.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 110,
+    "fields": {
+      "cocktail": "Bloody Spritz",
+      "spirits": "Prosecco",
+      "taste": "Savory",
+      "boozy": "Light",
+      "ingredients": "Prosecco, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Prosecco with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/bloody_spritz.jpg"
+    }
+  },
+  {
+    "model": "bar_do_pedro.drinks",
+    "pk": 111,
+    "fields": {
+      "cocktail": "Smoked Old Fashioned",
+      "spirits": "Whiskey",
+      "taste": "Smoky",
+      "boozy": "Strong",
+      "ingredients": "Whiskey, fresh citrus, sweetener, ice, garnish",
+      "instructions": "Combine Whiskey with mixers to taste, stir or shake with ice, serve and garnish as preferred.",
+      "image": "media/cocktails/smoked_old_fashioned.jpg"
+    }
   }
 ]

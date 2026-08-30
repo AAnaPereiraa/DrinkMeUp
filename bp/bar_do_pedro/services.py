@@ -33,12 +33,69 @@ def shift_boozy(boozy: str, direction: int) -> str | None:
     return None
 
 
+RUM_FAMILY = frozenset({
+    "rum",
+    "white rum",
+    "dark rum",
+    "spiced rum",
+    "spicy rum",
+    "gold rum",
+    "light rum",
+})
+
+SCOTCH_FAMILY = frozenset({
+    "scotch",
+    "blended scotch",
+    "islay scotch",
+    "single malt scotch",
+})
+
+WHISKEY_FAMILY = frozenset({
+    "whiskey",
+    "bourbon",
+    "rye whiskey",
+    "irish whiskey",
+})
+
+# Shown as the family label on the form; catalog names still match that checkbox.
+SPIRIT_DISPLAY_ALIASES = {
+    **{name: "Rum" for name in RUM_FAMILY if name != "rum"},
+    **{name: "Scotch" for name in SCOTCH_FAMILY if name != "scotch"},
+    **{name: "Whiskey" for name in ("rye whiskey", "irish whiskey")},
+}
+
+SPIRIT_FAMILIES = (
+    RUM_FAMILY,
+    SCOTCH_FAMILY,
+    WHISKEY_FAMILY,
+    frozenset({"brandy", "cognac"}),
+    frozenset({"prosecco", "champagne"}),
+    frozenset({"triple sec", "cointreau", "orange liqueur"}),
+    frozenset({"kahlua", "coffee liqueur"}),
+)
+
+TASTE_ONLY_MESSAGE = (
+    "We don't have that spirit with this taste, but here is another drink "
+    "in that taste."
+)
+
+
+def expand_spirit_names(spirits_list: list[str]) -> set[str]:
+    """Include related bottles (Rum ↔ White Rum, Whiskey ↔ Bourbon, etc.)."""
+    names = {spirit.casefold() for spirit in spirits_list if spirit}
+    expanded = set(names)
+    for family in SPIRIT_FAMILIES:
+        if names & family:
+            expanded |= family
+    return expanded
+
+
 def drink_has_any_spirit(drink_spirits: str, selected_spirits: list[str]) -> bool:
     """True if the drink's comma-separated spirits overlap the user's selection."""
-    selected = {spirit.casefold() for spirit in selected_spirits if spirit}
+    selected = expand_spirit_names(selected_spirits)
     if not selected:
         return True
-    drink_set = {spirit.casefold() for spirit in parse_spirits_list(drink_spirits)}
+    drink_set = expand_spirit_names(parse_spirits_list(drink_spirits))
     return bool(selected & drink_set)
 
 
@@ -94,6 +151,7 @@ def form_selection_from_preferences(preferences) -> dict:
     selected_spirits = parse_spirits_list(spirits)
     if selected_spirits == [PLACEHOLDER_SPIRITS]:
         selected_spirits = []
+    selected_spirits = _spirits_for_display(selected_spirits)
     return {
         "selected_taste": taste,
         "selected_boozy": boozy,
@@ -135,7 +193,11 @@ class GuestPreferences:
 
 def find_suggestion_pool(preferences):
     """
-    Find drinks for the user's taste and spirits, trying boozy level up then down.
+    Find drinks for the user's taste and spirits.
+
+    Tries the requested boozy level, then nearby levels, then any boozy
+    level. If that spirit is not in the catalog for this taste, offer
+    another drink with the same taste.
     Returns (match_list, info_message, is_exact_boozy_match).
     """
     taste = preferences.taste
@@ -146,10 +208,12 @@ def find_suggestion_pool(preferences):
     if exact_qs.exists():
         return list(exact_qs.values()), None, True
 
+    tried_boozy = {boozy}
     for direction in (1, -1):
         adjusted_boozy = shift_boozy(boozy, direction)
-        if not adjusted_boozy:
+        if not adjusted_boozy or adjusted_boozy in tried_boozy:
             continue
+        tried_boozy.add(adjusted_boozy)
         fallback_qs = queryset_for_preferences(taste, adjusted_boozy, spirits_list)
         if fallback_qs.exists():
             boozy_label = BOOZY_LABELS.get(adjusted_boozy, adjusted_boozy)
@@ -158,6 +222,22 @@ def find_suggestion_pool(preferences):
                 f"we can recommend a {boozy_label} boozy level option."
             )
             return list(fallback_qs.values()), message, False
+
+    for other_boozy in BOOZY_LEVELS:
+        if other_boozy in tried_boozy:
+            continue
+        leftover_qs = queryset_for_preferences(taste, other_boozy, spirits_list)
+        if leftover_qs.exists():
+            boozy_label = BOOZY_LABELS.get(other_boozy, other_boozy)
+            message = (
+                "Unfortunately there is no match, but with this taste and spirits "
+                f"we can recommend a {boozy_label} boozy level option."
+            )
+            return list(leftover_qs.values()), message, False
+
+    taste_qs = Drinks.objects.filter(taste=taste)
+    if taste_qs.exists():
+        return list(taste_qs.values()), TASTE_ONLY_MESSAGE, False
 
     return [], NO_MATCH_MESSAGE, False
 
@@ -219,15 +299,38 @@ def get_guest_motivational_message(request) -> str:
     return request.session["guest_motivational_msg"]
 
 
+def _display_spirit_name(spirit: str) -> str:
+    return SPIRIT_DISPLAY_ALIASES.get(spirit.casefold(), spirit)
+
+
+def _spirits_for_display(spirits_list: list[str]) -> list[str]:
+    """Map hidden rum-family names to the checkbox label (Rum)."""
+    seen: set[str] = set()
+    display: list[str] = []
+    for spirit in spirits_list:
+        label = _display_spirit_name(spirit)
+        key = label.casefold()
+        if key in seen:
+            continue
+        seen.add(key)
+        display.append(label)
+    return display
+
+
 def get_available_spirits() -> list[str]:
-    """Build a sorted list of all spirits present in the Drinks table."""
+    """Build a sorted list of spirits for the order form.
+
+    Family bottles (White Rum, Dark Rum, Blended Scotch, Islay Scotch,
+    Irish Whiskey, Rye Whiskey, …) are not shown as their own
+    checkboxes; those drinks match the family label.
+    """
     all_spirits = set()
     for spirits_value in Drinks.objects.values_list("spirits", flat=True):
         if spirits_value:
             for part in spirits_value.split(","):
                 spirit = part.strip()
                 if spirit:
-                    all_spirits.add(spirit)
+                    all_spirits.add(_display_spirit_name(spirit))
     return sorted(all_spirits)
 
 

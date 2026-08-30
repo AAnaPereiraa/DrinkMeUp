@@ -8,8 +8,11 @@ from rest_framework.test import APIClient
 
 from bar_do_pedro.models import Drinks, DrinksMade, UserProfile
 from bar_do_pedro.services import (
+    TASTE_ONLY_MESSAGE,
+    drink_has_any_spirit,
     find_suggestion_pool,
     form_selection_from_preferences,
+    get_available_spirits,
 )
 
 
@@ -184,16 +187,116 @@ class SuggestionServiceTests(DrinkFactoryMixin, TestCase):
         self.assertIsNotNone(message)
         self.assertEqual({drink["id"] for drink in pool}, {stronger.id})
 
-    def test_spirit_tokens_are_matched_exactly(self):
+    def test_spirit_tokens_are_not_treated_as_regex(self):
         gin = self.make_drink(cocktail="Gin Fizz", spirits="Gin", taste="Sour", boozy="Light")
-        self.make_drink(cocktail="Vodka Sour", spirits="Vodka", taste="Sour", boozy="Light")
-        profile = UserProfile(taste="Sour", boozy="Light", spirits=".*")
+        vodka = self.make_drink(cocktail="Vodka Sour", spirits="Vodka", taste="Sour", boozy="Light")
+        self.assertFalse(drink_has_any_spirit("Gin", [".*"]))
+        self.assertFalse(drink_has_any_spirit("Vodka", [".*"]))
 
+        profile = UserProfile(taste="Sour", boozy="Light", spirits=".*")
         pool, message, is_exact = find_suggestion_pool(profile)
-        self.assertEqual(pool, [])
         self.assertFalse(is_exact)
-        self.assertIsNotNone(message)
-        self.assertNotIn(gin.id, {drink.get("id") for drink in pool})
+        self.assertEqual(message, TASTE_ONLY_MESSAGE)
+        self.assertEqual({drink["id"] for drink in pool}, {gin.id, vodka.id})
+
+    def test_rum_matches_the_full_rum_family(self):
+        mojito = self.make_drink(
+            cocktail="Mojito", spirits="White Rum", taste="Fresh", boozy="Light"
+        )
+        cable_car = self.make_drink(
+            cocktail="Cable Car", spirits="Spiced Rum", taste="Fresh", boozy="Light"
+        )
+        dark_n_stormy = self.make_drink(
+            cocktail="Dark n Stormy", spirits="Dark Rum", taste="Fresh", boozy="Light"
+        )
+        profile = UserProfile(taste="Fresh", boozy="Light", spirits="Rum")
+        pool, message, is_exact = find_suggestion_pool(profile)
+        self.assertTrue(is_exact)
+        self.assertIsNone(message)
+        self.assertEqual(
+            {drink["id"] for drink in pool},
+            {mojito.id, cable_car.id, dark_n_stormy.id},
+        )
+
+    def test_form_shows_only_rum_for_the_rum_family(self):
+        self.make_drink(cocktail="Mojito", spirits="White Rum", taste="Fresh", boozy="Light")
+        self.make_drink(cocktail="Cable Car", spirits="Spiced Rum", taste="Fresh", boozy="Medium")
+        self.make_drink(cocktail="Dark n Stormy", spirits="Dark Rum", taste="Fresh", boozy="Medium")
+        spirits = get_available_spirits()
+        self.assertIn("Rum", spirits)
+        self.assertNotIn("White Rum", spirits)
+        self.assertNotIn("Spiced Rum", spirits)
+        self.assertNotIn("Spicy Rum", spirits)
+        self.assertNotIn("Dark Rum", spirits)
+
+    def test_scotch_matches_blended_and_islay(self):
+        rusty_nail = self.make_drink(
+            cocktail="Rusty Nail", spirits="Scotch", taste="Smoky", boozy="Strong"
+        )
+        penicillin = self.make_drink(
+            cocktail="Penicillin",
+            spirits="Blended Scotch, Islay Scotch",
+            taste="Smoky",
+            boozy="Strong",
+        )
+        profile = UserProfile(taste="Smoky", boozy="Strong", spirits="Scotch")
+        pool, message, is_exact = find_suggestion_pool(profile)
+        self.assertTrue(is_exact)
+        self.assertIsNone(message)
+        self.assertEqual({drink["id"] for drink in pool}, {rusty_nail.id, penicillin.id})
+
+    def test_form_shows_only_scotch_for_the_scotch_family(self):
+        self.make_drink(cocktail="Rusty Nail", spirits="Scotch", taste="Smoky", boozy="Strong")
+        self.make_drink(
+            cocktail="Penicillin",
+            spirits="Blended Scotch, Islay Scotch",
+            taste="Smoky",
+            boozy="Strong",
+        )
+        spirits = get_available_spirits()
+        self.assertIn("Scotch", spirits)
+        self.assertNotIn("Blended Scotch", spirits)
+        self.assertNotIn("Islay Scotch", spirits)
+
+    def test_whiskey_matches_irish_and_rye(self):
+        old_fashioned = self.make_drink(
+            cocktail="Old Fashioned", spirits="Whiskey", taste="Bitter", boozy="Strong"
+        )
+        manhattan = self.make_drink(
+            cocktail="Manhattan", spirits="Rye Whiskey", taste="Bitter", boozy="Strong"
+        )
+        tipperary = self.make_drink(
+            cocktail="Tipperary", spirits="Irish Whiskey", taste="Bitter", boozy="Strong"
+        )
+        profile = UserProfile(taste="Bitter", boozy="Strong", spirits="Whiskey")
+        pool, message, is_exact = find_suggestion_pool(profile)
+        self.assertTrue(is_exact)
+        self.assertIsNone(message)
+        self.assertEqual(
+            {drink["id"] for drink in pool},
+            {old_fashioned.id, manhattan.id, tipperary.id},
+        )
+
+    def test_form_shows_only_whiskey_for_irish_and_rye(self):
+        self.make_drink(cocktail="Old Fashioned", spirits="Whiskey", taste="Bitter", boozy="Strong")
+        self.make_drink(cocktail="Manhattan", spirits="Rye Whiskey", taste="Bitter", boozy="Strong")
+        self.make_drink(cocktail="Tipperary", spirits="Irish Whiskey", taste="Bitter", boozy="Strong")
+        self.make_drink(cocktail="Mint Julep", spirits="Bourbon", taste="Sweet", boozy="Strong")
+        spirits = get_available_spirits()
+        self.assertIn("Whiskey", spirits)
+        self.assertIn("Bourbon", spirits)
+        self.assertNotIn("Irish Whiskey", spirits)
+        self.assertNotIn("Rye Whiskey", spirits)
+
+    def test_taste_fallback_when_spirit_is_missing(self):
+        penicillin = self.make_drink(
+            cocktail="Penicillin", spirits="Scotch", taste="Smoky", boozy="Strong"
+        )
+        profile = UserProfile(taste="Smoky", boozy="Strong", spirits="Gin")
+        pool, message, is_exact = find_suggestion_pool(profile)
+        self.assertFalse(is_exact)
+        self.assertEqual(message, TASTE_ONLY_MESSAGE)
+        self.assertEqual({drink["id"] for drink in pool}, {penicillin.id})
 
     def test_form_selection_ignores_placeholders(self):
         profile = UserProfile(taste="Taste", boozy="Boozy", spirits="Spirits")
@@ -201,6 +304,44 @@ class SuggestionServiceTests(DrinkFactoryMixin, TestCase):
         self.assertEqual(selection["selected_taste"], "")
         self.assertEqual(selection["selected_boozy"], "")
         self.assertEqual(selection["selected_spirits"], [])
+
+
+class CatalogCoverageTests(TestCase):
+    fixtures = ["drinks.json"]
+
+    def test_each_taste_has_a_core_spirit_drink(self):
+        from bar_do_pedro.services import BOOZY_LEVELS, queryset_for_preferences
+
+        tastes = [
+            "Sweet",
+            "Citrus",
+            "Bitter",
+            "Fruity",
+            "Fresh",
+            "Sour",
+            "Smoky",
+            "Savory",
+        ]
+        core_spirits = [
+            "Gin",
+            "Vodka",
+            "Tequila",
+            "Rum",
+            "Whiskey",
+            "Wine",
+            "Brandy",
+            "Prosecco",
+        ]
+        missing = []
+        for taste in tastes:
+            for spirit in core_spirits:
+                has_match = any(
+                    queryset_for_preferences(taste, boozy, [spirit]).exists()
+                    for boozy in BOOZY_LEVELS
+                )
+                if not has_match:
+                    missing.append(f"{taste} + {spirit}")
+        self.assertEqual(missing, [])
 
 
 class ApiTests(DrinkFactoryMixin, TestCase):
