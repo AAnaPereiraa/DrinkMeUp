@@ -68,6 +68,19 @@ class MenuLabelsTests(TestCase):
         self.assertNotContains(response, ">Strong<")
 
 
+class GoogleLoginPageTests(TestCase):
+    def test_google_login_uses_site_chrome(self):
+        response = self.client.get(reverse("google_login"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "socialaccount/login.html")
+        self.assertTemplateUsed(response, "bar_pedro/base.html")
+        self.assertContains(response, "DrinkMeUp")
+        self.assertContains(response, "Imprint")
+        self.assertContains(response, "Privacy Policy")
+        self.assertContains(response, "Sign in with Google")
+        self.assertContains(response, "login.css")
+
+
 class ProfileFormRestoreTests(DrinkFactoryMixin, TestCase):
     def setUp(self):
         self.make_drink(cocktail="Mojito", spirits="White Rum", taste="Fresh", boozy="Light")
