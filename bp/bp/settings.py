@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+import sys
 from datetime import timedelta
 
+import dj_database_url
 import dotenv
 from pathlib import Path
 
@@ -27,11 +29,14 @@ dotenv.read_dotenv(dotenv_path)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
+TESTING = "test" in sys.argv
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv("SECRET_KEY")
+if TESTING and not SECRET_KEY:
+    SECRET_KEY = "test-insecure-secret-key"
 
 ALLOWED_HOSTS = [
     host.strip()
@@ -50,6 +55,14 @@ CSRF_TRUSTED_ORIGINS = [
     ).split(",")
     if origin.strip()
 ]
+
+render_host = os.getenv("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if render_host:
+    if render_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(render_host)
+    render_origin = f"https://{render_host}"
+    if render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(render_origin)
 
 
 # Application definition
@@ -93,6 +106,9 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
+if not DEBUG:
+    MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
 ROOT_URLCONF = "bp.urls"
 
 # Base directory for base.html and navbar.html
@@ -126,6 +142,12 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+if os.getenv("DATABASE_URL"):
+    DATABASES["default"] = dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True,
+    )
 
 
 # Password validation
@@ -169,6 +191,16 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "bar_do_pedro/media"
 STATICFILES_DIRS = [BASE_DIR / "bar_do_pedro/static"]
 
+if not DEBUG:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        },
+    }
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -186,18 +218,20 @@ LOGOUT_REDIRECT_URL = '/login/'
 # Email Backend
 
 # DEVELOPMENT SETTINGS
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "webmaster@localhost"
 
-# PRODUCTION SETTINGS
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # The backend to use for sending emails
-EMAIL_HOST = 'smtp.gmail.com'  # Gmail SMTP server
-EMAIL_PORT = 587  # Port for TLS/STARTTLS
-EMAIL_HOST_USER = os.getenv("EMAIL_USER")  # Your Gmail email address
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS") # Your Gmail App Password
-EMAIL_USE_TLS = True  # Use TLS/STARTTLS for security
-DEFAULT_FROM_EMAIL = os.getenv("EMAIL_USER")
+# PRODUCTION SETTINGS — Gmail SMTP. Render's free web service blocks ports
+# 25/465/587, so password-reset mail will not send there unless you switch
+# to an HTTPS email API later.
+if os.getenv("EMAIL_USER"):
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "smtp.gmail.com"
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = os.getenv("EMAIL_USER")
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS")
+    EMAIL_USE_TLS = True
+    DEFAULT_FROM_EMAIL = os.getenv("EMAIL_USER")
 
 # Password Hashing
 PASSWORD_HASHERS = [
@@ -207,6 +241,10 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
     "django.contrib.auth.hashers.ScryptPasswordHasher",
 ]
+
+if TESTING:
+    PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+    EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 # Auth Backends
 
@@ -230,7 +268,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }
 
@@ -257,3 +295,12 @@ SOCIALACCOUNT_PROVIDERS = {
         }, 
     }
 }
+
+if not DEBUG and not TESTING:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+

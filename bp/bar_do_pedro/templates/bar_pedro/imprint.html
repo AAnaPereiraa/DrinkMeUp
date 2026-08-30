@@ -1,8 +1,38 @@
-{% extends 'fitness_jerk/base.html' %}
+{% extends 'bar_pedro/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/legal.css' %}">
+{% endblock %}
 {% block title %}Imprint{% endblock %}
 
 {% block content %}
+<article class="legal-page">
+    <h1>Imprint</h1>
+    <p>DrinkMeUp is a personal cocktail recommendation project. It is not a commercial bar or shop.</p>
 
-    <h2>Hier könnte ihre Werbung stehen</h2>
+    <h2>Operator</h2>
+    <p>Pedro Pereira (product owner)</p>
+    <p>Development: Ana Pereira</p>
+    {% if contact_email %}
+    <p>Contact: <a href="mailto:{{ contact_email }}">{{ contact_email }}</a></p>
+    {% else %}
+    <p>Contact: use the email address on the account you registered with DrinkMeUp.</p>
+    {% endif %}
 
+    <h2>What this site does</h2>
+    <p>
+        DrinkMeUp suggests cocktails from a curated list based on taste, spirits, and strength
+        preferences. Registered users can save ratings and comments for drinks they have made.
+        Guests can get a suggestion without creating an account.
+    </p>
+
+    <h2>Liability</h2>
+    <p>
+        Recipes are provided for personal, private use. Drink responsibly. We do not warrant that
+        recipes, images, or recommendations are complete or suitable for every situation. You are
+        responsible for checking ingredients (including allergens) before you mix or serve a drink.
+    </p>
+
+    <p class="legal-meta"><a href="{% url 'privacy_policy' %}">Privacy Policy</a></p>
+</article>
 {% endblock %}

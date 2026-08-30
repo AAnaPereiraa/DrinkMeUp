@@ -1,9 +1,14 @@
 import random
+import re
 from pathlib import Path
 
 from django.core.cache import cache
 
 from .models import Drinks, DrinksMade, UserProfile
+
+PLACEHOLDER_TASTE = "Taste"
+PLACEHOLDER_BOOZY = "Boozy"
+PLACEHOLDER_SPIRITS = "Spirits"
 
 BASE_DIR = Path(__file__).resolve().parent
 RESPONSE_FILE = BASE_DIR / "templates/tough_responses.txt"
@@ -29,13 +34,44 @@ def shift_boozy(boozy: str, direction: int) -> str | None:
     return None
 
 
+def spirits_match_regex(spirits_list: list[str]) -> str:
+    """Build a word-boundary regex from user-supplied spirit names (escaped)."""
+    escaped = [re.escape(spirit) for spirit in spirits_list if spirit]
+    if not escaped:
+        return r"(?!)"
+    return rf"\b({'|'.join(escaped)})\b"
+
+
 def queryset_for_preferences(taste: str, boozy: str, spirits_list: list[str]):
     """Return drinks matching taste, boozy, and optional spirits."""
     queryset = Drinks.objects.filter(boozy=boozy, taste=taste)
     if spirits_list:
-        spirits_pattern = "|".join(spirits_list)
-        queryset = queryset.filter(spirits__regex=rf"\b({spirits_pattern})\b")
+        queryset = queryset.filter(spirits__regex=spirits_match_regex(spirits_list))
     return queryset
+
+
+def get_or_create_user_profile(user) -> UserProfile:
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    return profile
+
+
+def form_selection_from_preferences(preferences) -> dict:
+    """Values the order form needs to restore the last taste / spirits / boozy."""
+    taste = getattr(preferences, "taste", "") or ""
+    boozy = getattr(preferences, "boozy", "") or ""
+    spirits = getattr(preferences, "spirits", "") or ""
+    if taste == PLACEHOLDER_TASTE:
+        taste = ""
+    if boozy == PLACEHOLDER_BOOZY:
+        boozy = ""
+    selected_spirits = parse_spirits_list(spirits)
+    if selected_spirits == [PLACEHOLDER_SPIRITS]:
+        selected_spirits = []
+    return {
+        "selected_taste": taste,
+        "selected_boozy": boozy,
+        "selected_spirits": selected_spirits,
+    }
 
 
 def get_spirits_columns() -> list[list[str]]:
@@ -128,8 +164,7 @@ def get_matching_drinks(user_profile: UserProfile):
     spirits_list = parse_spirits_list(user_profile.spirits)
     match1 = Drinks.objects.filter(boozy=user_profile.boozy, taste=user_profile.taste)
     if spirits_list:
-        spirits_pattern = "|".join(spirits_list)
-        match2_qs = match1.filter(spirits__regex=rf"\b({spirits_pattern})\b")
+        match2_qs = match1.filter(spirits__regex=spirits_match_regex(spirits_list))
     else:
         match2_qs = match1
 
@@ -242,7 +277,7 @@ def record_drink_made(user, rate: str, comment: str) -> DrinksMade:
         drink=drink,
     )
 
-    user_profile = UserProfile.objects.get(user=user)
+    user_profile = get_or_create_user_profile(user)
     messages = get_file_content_as_list(RESPONSE_FILE)
     if messages:
         user_profile.latest_post = random.choice(messages)

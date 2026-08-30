@@ -39,7 +39,9 @@ urlpatterns = [
     path('menu/', views.menu, name='menu'),
     path('details/<int:id>/', views.cocktail_info, name='details'),
     path('delete/', views.delete_user_func, name='delete'),
-    path("imprint.html", ImprintView.as_view(), name="imprint"),
-    path("privacy-policy.html", PrivacyPolicyView.as_view(), name="privacy_policy"),
+    path("imprint/", ImprintView.as_view(), name="imprint"),
+    path("privacy/", PrivacyPolicyView.as_view(), name="privacy_policy"),
+    path("imprint.html", ImprintView.as_view()),
+    path("privacy-policy.html", PrivacyPolicyView.as_view()),
  ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

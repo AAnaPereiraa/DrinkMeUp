@@ -16,7 +16,10 @@
                 <a href="{% url 'profile' %}" class="nav-item">Bar</a>
             </div>
             <div id="profile-btn">
-                <a href="{% url 'logout' %}" class="nav-item">Log out</a>
+                <form action="{% url 'logout' %}" method="post" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-item">Log out</button>
+                </form>
             </div>
             <div id="profile-btn" style= "background: red">
                 <a href="{% url 'delete' %}" class="nav-item">Delete profile</a>

@@ -63,11 +63,41 @@
 
 #joinus-btn a,
 #profile-btn a,
-#signin-btn a {
+#signin-btn a,
+#profile-btn button.nav-item {
     text-decoration: none;
     color: #fff;
     font-weight: bold;
     padding-block: 4px;
+}
+
+.logout-form {
+    display: inline;
+    margin: 0;
+}
+
+.logout-form button.nav-item {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.site-footer {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    padding: 16px 16px 32px;
+}
+
+.site-footer a {
+    color: #d19b4e;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.site-footer a:hover {
+    color: whitesmoke;
 }
 
 .nav-item:hover {

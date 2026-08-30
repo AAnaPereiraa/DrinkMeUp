@@ -1,29 +1,49 @@
 import random
-from django.contrib import messages
-from django.contrib.auth import login, logout 
+
+from django.conf import settings
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LogoutView, LoginView, PasswordResetConfirmView, PasswordResetView, PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView, TemplateView
-from django.core.mail import send_mail
-from django.shortcuts import redirect, render
+from django.contrib.auth.views import (
+    LoginView,
+    PasswordChangeDoneView,
+    PasswordChangeView,
+    PasswordResetCompleteView,
+    PasswordResetConfirmView,
+    PasswordResetDoneView,
+    PasswordResetView,
+    TemplateView,
+)
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from pathlib import Path
+from django.views.decorators.http import require_POST
+
 from .forms import BarUserForm
-from .models import UserProfile, Drinks, DrinksMade
+from .models import Drinks, DrinksMade
 from .services import (
+    RESPONSE_FILE,
+    drink_to_session_data,
     find_suggestion_pool,
+    form_selection_from_preferences,
     get_file_content_as_list,
+    get_guest_motivational_message,
+    get_or_create_user_profile,
     get_spirits_columns,
     GuestPreferences,
-    get_guest_motivational_message,
     is_suggestion_in_pool,
     resolve_drink,
-    drink_to_session_data,
-    RESPONSE_FILE,
 )
 
 
 ORDER_VALIDATION_MESSAGE = "Please select taste, at least one spirit and boozy level"
+
+
+def _selection_from_post(request) -> dict:
+    return {
+        "selected_taste": request.POST.get("taste", ""),
+        "selected_boozy": request.POST.get("strength", ""),
+        "selected_spirits": request.POST.getlist("spirit"),
+    }
 
 
 def _order_form_is_valid(request) -> bool:
@@ -103,7 +123,12 @@ def _render_cocktail_suggestion(request, preferences, template_name, bar_url_nam
         cocktail_suggestion = drink_to_session_data(random.choice(match_pool))
         request.session["selected_cocktail"] = cocktail_suggestion
 
-    cocktail_drink = resolve_drink(cocktail_suggestion)
+    try:
+        cocktail_drink = resolve_drink(cocktail_suggestion)
+    except Drinks.DoesNotExist:
+        cocktail_suggestion = drink_to_session_data(random.choice(match_pool))
+        request.session["selected_cocktail"] = cocktail_suggestion
+        cocktail_drink = resolve_drink(cocktail_suggestion)
 
     context = {
         "cocktails": cocktail_drink,
@@ -124,14 +149,17 @@ def _render_cocktail_suggestion(request, preferences, template_name, bar_url_nam
             context["cocktails"] = resolve_drink(cocktail_suggestion)
 
         if action == "YES" and not is_guest:
-            username = request.user.username
-            cocktail = request.session.get("selected_cocktail").get("cocktail")
-            drink = Drinks.objects.get(cocktail=cocktail)
+            stored = request.session.get("selected_cocktail") or {}
+            cocktail = stored.get("cocktail")
+            if not cocktail:
+                return redirect(bar_url_name)
+
+            drink = get_object_or_404(Drinks, cocktail=cocktail)
             rate = request.POST.get("rate")
             comment = request.POST.get("comment")
 
             DrinksMade.objects.create(
-                user=username, cocktail=cocktail, rate=rate, comment=comment, drink=drink
+                user=request.user.username, cocktail=cocktail, rate=rate, comment=comment, drink=drink
             )
 
             preferences.latest_post = random.choice(get_file_content_as_list(RESPONSE_FILE))
@@ -197,8 +225,8 @@ def signup_view(request):
             username = form.cleaned_data.get("username")                # create the new user
             password = form.cleaned_data.get("password1")
             email = form.cleaned_data.get("email")
-            user = User.objects.create_user(username=username, email=email, password=password)  
-            user_profile = UserProfile.objects.create(user=user)               # create userinfo related to new user
+            user = User.objects.create_user(username=username, email=email, password=password)
+            get_or_create_user_profile(user)
             user.backend = "django.contrib.auth.backends.ModelBackend"  # Choose correct backend for user creation -> settings/AUTHENTICATION_BACKENDS
             login(request, user)    
             return redirect("profile")
@@ -210,6 +238,7 @@ def signup_view(request):
 
 
 #logout functionality
+@require_POST
 def logout_endpoint(request):
     """Logs out the user"""
     logout(request)
@@ -236,10 +265,9 @@ def profile_view(request):
     """here the user information is displayed in the profile page and user is able to answer some questions so it can suggest cocktails"""
     
     user = request.user
-    user_profile = UserProfile.objects.get(user=user)
+    user_profile = get_or_create_user_profile(user)
     latest_post =  user_profile.latest_post
     user_drinks = DrinksMade.objects.filter(user=user.username).order_by('-id')[:10]
-    selected_spirits = []
     spirits_columns = get_spirits_columns()
 
     context = {
@@ -247,10 +275,10 @@ def profile_view(request):
         'motivational_msg': latest_post,
         'drinks': user_drinks,
         'spirits_columns': spirits_columns,
-        'selected_spirits': selected_spirits,
         'show_fallback_prompt': request.session.get('show_fallback_prompt', False),
         'fallback_message': request.session.get('fallback_message', ''),
         'error_message': request.session.pop('message', None),
+        **form_selection_from_preferences(user_profile),
     }
 
     if request.method == 'POST':
@@ -261,6 +289,7 @@ def profile_view(request):
             return redirect_response
         if validation_error:
             context["validation_error"] = validation_error
+            context.update(_selection_from_post(request))
 
     return render(request, 'bar_pedro/profile.html', context)
 
@@ -268,7 +297,7 @@ def profile_view(request):
 def cocktails(request):
     """This function is to run the drinks list match the user preferences and randomly suggest a cocktail"""
     user = request.user
-    user_profile = UserProfile.objects.get(user=user)
+    user_profile = get_or_create_user_profile(user)
     return _render_cocktail_suggestion(
         request, user_profile, "bar_pedro/cocktails.html", "profile", is_guest=False
     )
@@ -281,15 +310,14 @@ def guest_view(request):
 
     request.session["guest_mode"] = True
     preferences = GuestPreferences.from_session(request)
-    selected_spirits = []
 
     context = {
         "spirits_columns": get_spirits_columns(),
-        "selected_spirits": selected_spirits,
         "motivational_msg": get_guest_motivational_message(request),
         "show_fallback_prompt": request.session.get("show_fallback_prompt", False),
         "fallback_message": request.session.get("fallback_message", ""),
         "error_message": request.session.pop("message", None),
+        **form_selection_from_preferences(preferences),
     }
 
     if request.method == "POST":
@@ -300,6 +328,7 @@ def guest_view(request):
             return redirect_response
         if validation_error:
             context["validation_error"] = validation_error
+            context.update(_selection_from_post(request))
 
     return render(request, "bar_pedro/guest.html", context)
 
@@ -323,19 +352,29 @@ def menu(request):
 
 def cocktail_info(request, id):
     "display all the specific cocktail information, clicked on the cocktails list page or my cocktails list"
-    cocktail = Drinks.objects.get(id=id)
+    cocktail = get_object_or_404(Drinks, id=id)
     context = {
         'cocktail': cocktail
     }
     
     return render(request, "bar_pedro/cocktail_info.html", context)
 
+class LegalPageMixin:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        contact_email = settings.DEFAULT_FROM_EMAIL or ""
+        if contact_email in ("webmaster@localhost",):
+            contact_email = ""
+        context["contact_email"] = contact_email
+        return context
+
+
 class LandingPage(TemplateView):
     template_name = "bar_pedro/landing_page.html"
 
-class ImprintView(TemplateView):
+class ImprintView(LegalPageMixin, TemplateView):
     template_name = "bar_pedro/imprint.html"
 
-class PrivacyPolicyView(TemplateView):
+class PrivacyPolicyView(LegalPageMixin, TemplateView):
     template_name = "bar_pedro/privacy_policy.html"
 

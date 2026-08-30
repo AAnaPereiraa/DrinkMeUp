@@ -1,0 +1,69 @@
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background-image: url("Background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    min-height: 100vh;
+    color: whitesmoke;
+    font-family: Inter, sans-serif;
+}
+
+.legal-page {
+    max-width: 720px;
+    margin: 100px auto 48px;
+    padding: 28px 24px 36px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid #d19b4e;
+    border-radius: 12px;
+}
+
+.legal-page h1 {
+    color: whitesmoke;
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+    margin-bottom: 16px;
+}
+
+.legal-page h2 {
+    color: #d19b4e;
+    font-size: 1.15rem;
+    margin: 24px 0 8px;
+}
+
+.legal-page p,
+.legal-page li {
+    line-height: 1.55;
+    color: #f2f2f2;
+}
+
+.legal-page ul {
+    padding-left: 1.25rem;
+}
+
+.legal-page li {
+    margin-bottom: 8px;
+}
+
+.legal-page a {
+    color: #d19b4e;
+}
+
+.legal-meta {
+    margin-top: 28px;
+}
+
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+    }
+
+    .legal-page {
+        margin: 88px 12px 32px;
+        padding: 20px 16px 28px;
+    }
+}

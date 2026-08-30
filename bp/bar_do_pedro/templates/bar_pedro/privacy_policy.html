@@ -1,8 +1,62 @@
-{% extends 'fitness_jerk/base.html' %}
+{% extends 'bar_pedro/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/legal.css' %}">
+{% endblock %}
 {% block title %}Privacy Policy{% endblock %}
 
 {% block content %}
+<article class="legal-page">
+    <h1>Privacy Policy</h1>
+    <p>
+        This policy describes what DrinkMeUp stores when you use the website or the mobile API.
+        We do not sell your data.
+    </p>
 
-    <h2>Hier könnte ihre Werbung stehen</h2>
+    <h2>Data we collect</h2>
+    <ul>
+        <li><strong>Account:</strong> username, email, and a hashed password if you sign up.</li>
+        <li><strong>Google sign-in:</strong> if you choose Google, we receive the profile and email
+            Google shares for that login so we can create or recognise your account.</li>
+        <li><strong>Preferences:</strong> taste, spirits, and boozy level you submit to get a suggestion.</li>
+        <li><strong>Drink history:</strong> cocktails you mark as made, plus optional rating and comment.</li>
+        <li><strong>Guest use:</strong> preferences for a visit are kept in a session cookie on your device,
+            not in an account.</li>
+    </ul>
 
+    <h2>Cookies and sessions</h2>
+    <p>
+        We use a session cookie so you stay logged in, so guests keep their last order, and so
+        security features such as CSRF protection work. The mobile app uses access and refresh tokens
+        instead of a browser session.
+    </p>
+
+    <h2>Email</h2>
+    <p>
+        If you ask to reset a password, we send a reset link to the email on your account.
+        We do not use your email for marketing.
+    </p>
+
+    <h2>How long we keep data</h2>
+    <p>
+        Account and drink history stay until you delete the account. You can delete your profile
+        from the site; that removes your user record and drink history.
+    </p>
+
+    <h2>Your choices</h2>
+    <ul>
+        <li>Use Guest mode without creating an account.</li>
+        <li>Change your password from your account.</li>
+        <li>Delete your profile from the authenticated menu.</li>
+    </ul>
+
+    <h2>Contact</h2>
+    {% if contact_email %}
+    <p>Questions: <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.</p>
+    {% else %}
+    <p>Questions: contact us using the email on your DrinkMeUp account.</p>
+    {% endif %}
+
+    <p class="legal-meta"><a href="{% url 'imprint' %}">Imprint</a></p>
+</article>
 {% endblock %}

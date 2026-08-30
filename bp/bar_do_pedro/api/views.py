@@ -1,14 +1,16 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from bar_do_pedro.models import Drinks, DrinksMade, UserProfile
+from bar_do_pedro.models import Drinks, DrinksMade
 from bar_do_pedro.services import (
     clear_stored_suggestion,
     get_available_spirits,
     get_cocktail_suggestion,
+    get_or_create_user_profile,
     record_drink_made,
     shuffle_cocktail_suggestion,
 )
@@ -52,7 +54,7 @@ class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile = get_or_create_user_profile(request.user)
         serializer = UserProfileSerializer(user_profile)
         return Response(serializer.data)
 
@@ -77,7 +79,7 @@ class PreferencesView(APIView):
         serializer = PreferencesSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile = get_or_create_user_profile(request.user)
         user_profile.taste = serializer.validated_data["taste"]
         user_profile.boozy = serializer.validated_data["boozy"]
         user_profile.spirits = ", ".join(serializer.validated_data["spirits"])
@@ -100,7 +102,7 @@ class CocktailSuggestionView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile = get_or_create_user_profile(request.user)
 
         if not user_profile.taste or user_profile.taste == "Taste":
             return Response(
@@ -117,7 +119,7 @@ class CocktailSuggestionView(APIView):
         if not suggestion:
             return Response({"detail": info_message}, status=status.HTTP_404_NOT_FOUND)
 
-        drink = Drinks.objects.get(pk=suggestion["id"])
+        drink = get_object_or_404(Drinks, pk=suggestion["id"])
         response_data = DrinkSerializer(drink, context={"request": request}).data
         if info_message:
             response_data["recommendation_message"] = info_message
@@ -128,12 +130,12 @@ class CocktailShuffleView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile = get_or_create_user_profile(request.user)
         suggestion, info_message = shuffle_cocktail_suggestion(user_profile, request.user.id)
         if not suggestion:
             return Response({"detail": info_message}, status=status.HTTP_404_NOT_FOUND)
 
-        drink = Drinks.objects.get(pk=suggestion["id"])
+        drink = get_object_or_404(Drinks, pk=suggestion["id"])
         response_data = DrinkSerializer(drink, context={"request": request}).data
         if info_message:
             response_data["recommendation_message"] = info_message
@@ -161,7 +163,7 @@ class CocktailMadeView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile = get_or_create_user_profile(request.user)
         return Response(
             {
                 "drink_made": DrinkMadeSerializer(
