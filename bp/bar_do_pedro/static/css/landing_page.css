@@ -84,6 +84,25 @@ body {
   color: #d19b4e;
 }
 
+.about-bar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: whitesmoke;
+    background: #d19b4e;
+    padding: 4px 14px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 700;
+    vertical-align: middle;
+    transition: all 0.3s ease;
+}
+
+.about-bar-btn:hover {
+    background: limegreen;
+    color: #292929;
+}
+
 
 .landing-actions {
     display: flex;

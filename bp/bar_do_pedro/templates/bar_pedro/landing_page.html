@@ -8,14 +8,16 @@
 {% block content %}
     <div class="landing-container">
         <h1>DrinkMeUp</h1>
+        {% if user.is_authenticated %}
+        <p class="about-text">Make YOUR perfect drink, order at the <a href="{% url 'profile' %}" class="about-bar-btn">Bar</a>!!!</p>
+        {% else %}
         <p class="about-text">Make YOUR perfect drink!!!</p>
-            {% if not user.is_authenticated %}
-                <div class="landing-actions">
-                    <a href="{% url 'login' %}" class="landing-btn login-btn">Log in</a>
-                    <a href="{% url 'guest' %}" class="landing-btn guest-btn">Guest</a>
-                    <a href="{% url 'signup' %}" class="landing-btn join-us-btn">Join us</a>
-                </div>
-            {% endif %} 
+        <div class="landing-actions">
+            <a href="{% url 'login' %}" class="landing-btn login-btn">Log in</a>
+            <a href="{% url 'guest' %}" class="landing-btn guest-btn">Guest</a>
+            <a href="{% url 'signup' %}" class="landing-btn join-us-btn">Join us</a>
+        </div>
+        {% endif %}
     </div>
 
 
