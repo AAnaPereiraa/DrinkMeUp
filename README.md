@@ -22,7 +22,7 @@ Signed-in users get a Bar page: the order form plus the last 10 drinks they made
 - Auth: sign up, log in, log out, change / reset password, Google OAuth
 - Guest mode (no account)
 - Bar order form: taste, spirits, boozy level
-- Spirit families: Rum, Scotch, and Whiskey match related bottles; only the family name is shown on the form
+- Spirit families: Rum matches white / dark / spiced rum; Scotch matches blended and Islay; Whiskey matches Irish and rye. Those extra names are hidden on the form. Bourbon stays its own checkbox.
 - If there is no exact boozy match, a nearby level or another drink in that taste is offered
 - Cocktail page: ingredients, instructions, shuffle, mark as made, rate and comment
 - Menu grouped by boozy nicknames (Starting slow / It's getting hot in here / to infinity and beyond)
@@ -57,7 +57,7 @@ python manage.py test bar_do_pedro
 - After adding new drinks, load them on Neon, for example: `python bp/manage.py loaddata drinks_coverage`
 - Google login is optional. The operator sets `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` once on Render and adds this redirect URI in Google Cloud:
 
-  `https://YOUR-SERVICE.onrender.com/accounts/google/login/callback/`
+  `https://drinkmeup.onrender.com/accounts/google/login/callback/`
 
 - Render free blocks SMTP, so password-reset email may not send unless you use another mail path.
 
