@@ -23,7 +23,11 @@ body {
     background-repeat: no-repeat;
 }
 
-header,
+header {
+    position: relative;
+    z-index: 3000;
+}
+
 main,
 footer {
     position: relative;
