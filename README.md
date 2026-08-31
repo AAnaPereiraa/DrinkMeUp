@@ -1,6 +1,6 @@
 # DrinkMeUp
 
-[https://drinkmeup.onrender.com/]
+https://drinkmeup.onrender.com/
 
 ## Overview
 
